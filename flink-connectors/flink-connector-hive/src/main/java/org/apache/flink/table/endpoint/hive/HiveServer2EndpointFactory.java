@@ -62,8 +62,6 @@ public class HiveServer2EndpointFactory implements SqlGatewayEndpointFactory {
                 context.getSqlGatewayService(),
                 getInetSocketAddress(configuration),
                 checkNotNull(configuration.get(THRIFT_MAX_MESSAGE_SIZE)),
-                (int) configuration.get(THRIFT_LOGIN_TIMEOUT).toMillis(),
-                (int) configuration.get(THRIFT_LOGIN_BEBACKOFF_SLOT_LENGTH).toMillis(),
                 configuration.get(THRIFT_WORKER_THREADS_MIN),
                 configuration.get(THRIFT_WORKER_THREADS_MAX),
                 configuration.get(THRIFT_WORKER_KEEPALIVE_TIME),

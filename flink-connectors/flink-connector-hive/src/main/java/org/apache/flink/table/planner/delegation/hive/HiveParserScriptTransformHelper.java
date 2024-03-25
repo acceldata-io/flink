@@ -113,7 +113,7 @@ public class HiveParserScriptTransformHelper {
                             .toArray();
         }
 
-        ArrayList<ColumnInfo> inputSchema = relToRowResolver.get(input).getColumnInfos();
+        List<ColumnInfo> inputSchema = relToRowResolver.get(input).getColumnInfos();
 
         // If there is no "AS" clause, the output schema will be "key,value"
         ArrayList<ColumnInfo> outputCols = new ArrayList<>();

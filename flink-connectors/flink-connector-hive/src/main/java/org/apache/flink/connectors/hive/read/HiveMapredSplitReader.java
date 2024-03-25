@@ -34,8 +34,8 @@ import org.apache.flink.table.types.logical.LogicalType;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
+import org.apache.hadoop.hive.serde2.AbstractSerDe;
 import org.apache.hadoop.hive.serde2.Deserializer;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 import org.apache.hadoop.io.Writable;
@@ -125,8 +125,8 @@ public class HiveMapredSplitReader implements SplitReader {
                     (Deserializer)
                             Class.forName(sd.getSerdeInfo().getSerializationLib()).newInstance();
             Configuration conf = new Configuration();
-            SerDeUtils.initializeSerDe(
-                    deserializer, conf, hiveTablePartition.getTableProps(), null);
+            AbstractSerDe serDe = (AbstractSerDe) deserializer;
+            serDe.initialize(conf, hiveTablePartition.getTableProps(), null);
             structObjectInspector = (StructObjectInspector) deserializer.getObjectInspector();
             structFields = structObjectInspector.getAllStructFieldRefs();
         } catch (Exception e) {

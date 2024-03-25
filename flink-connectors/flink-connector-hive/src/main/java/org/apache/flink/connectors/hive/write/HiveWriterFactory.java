@@ -38,9 +38,9 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.api.SerDeInfo;
 import org.apache.hadoop.hive.ql.exec.FileSinkOperator.RecordWriter;
 import org.apache.hadoop.hive.ql.io.HiveOutputFormat;
+import org.apache.hadoop.hive.serde2.AbstractSerDe;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
@@ -186,7 +186,8 @@ public class HiveWriterFactory implements Serializable {
         ReflectionUtils.setConf(recordSerDe, jobConf);
 
         // TODO: support partition properties, for now assume they're same as table properties
-        SerDeUtils.initializeSerDe((Deserializer) recordSerDe, jobConf, tableProperties, null);
+        AbstractSerDe serde = (AbstractSerDe) recordSerDe;
+        serde.initialize(jobConf, tableProperties, null);
 
         this.formatFields = allColumns.length - partitionColumns.length;
         this.hiveConversions = new HiveObjectConversion[formatFields];
