@@ -25,11 +25,11 @@ import org.apache.flink.table.planner.delegation.hive.parse.HiveParserErrorMsg;
 
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.tools.FrameworkConfig;
-import org.apache.hadoop.hive.common.ObjectPair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hive.ql.ErrorMsg;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
 import org.apache.hadoop.hive.ql.lib.Node;
-import org.apache.hadoop.hive.ql.lib.NodeProcessor;
+import org.apache.hadoop.hive.ql.lib.SemanticNodeProcessor;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeConstantDesc;
@@ -236,7 +236,7 @@ public class HiveParserQBSubQuery {
         private final HiveParserRowResolver parentQueryRR;
         boolean forHavingClause;
         String parentQueryNewAlias;
-        NodeProcessor defaultExprProcessor;
+        SemanticNodeProcessor defaultExprProcessor;
         Stack<Node> stack;
         private final FrameworkConfig frameworkConfig;
         private final RelOptCluster cluster;
@@ -265,15 +265,14 @@ public class HiveParserQBSubQuery {
          * 3. All other expressions have a Type based on their children.
          *    An Expr w/o children is assumed to refer to neither.
          */
-        private ObjectPair<HiveParserQBSubQuery.ExprType, ColumnInfo> analyzeExpr(
+        private Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> analyzeExpr(
                 HiveParserASTNode expr) {
             ColumnInfo cInfo = null;
             if (forHavingClause) {
                 try {
                     cInfo = parentQueryRR.getExpression(expr);
                     if (cInfo != null) {
-                        return ObjectPair.create(
-                                HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
+                        return Pair.of(HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
                     }
                 } catch (SemanticException se) {
                 }
@@ -282,19 +281,19 @@ public class HiveParserQBSubQuery {
                 HiveParserASTNode dot = firstDot(expr);
                 cInfo = resolveDot(dot);
                 if (cInfo != null) {
-                    return ObjectPair.create(HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
+                    return Pair.of(HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
                 }
-                return ObjectPair.create(HiveParserQBSubQuery.ExprType.REFERS_SUBQUERY, null);
+                return Pair.of(HiveParserQBSubQuery.ExprType.REFERS_SUBQUERY, null);
             } else if (expr.getType() == HiveASTParser.TOK_TABLE_OR_COL) {
-                return ObjectPair.create(HiveParserQBSubQuery.ExprType.REFERS_SUBQUERY, null);
+                return Pair.of(HiveParserQBSubQuery.ExprType.REFERS_SUBQUERY, null);
             } else {
                 HiveParserQBSubQuery.ExprType exprType = HiveParserQBSubQuery.ExprType.REFERS_NONE;
                 int cnt = expr.getChildCount();
                 for (int i = 0; i < cnt; i++) {
                     HiveParserASTNode child = (HiveParserASTNode) expr.getChild(i);
-                    exprType = exprType.combine(analyzeExpr(child).getFirst());
+                    exprType = exprType.combine(analyzeExpr(child).getLeft());
                 }
-                return ObjectPair.create(exprType, null);
+                return Pair.of(exprType, null);
             }
         }
 
@@ -316,27 +315,25 @@ public class HiveParserQBSubQuery {
             if (type == HiveASTParser.EQUAL) {
                 HiveParserASTNode left = (HiveParserASTNode) conjunct.getChild(0);
                 HiveParserASTNode right = (HiveParserASTNode) conjunct.getChild(1);
-                ObjectPair<HiveParserQBSubQuery.ExprType, ColumnInfo> leftInfo = analyzeExpr(left);
-                ObjectPair<HiveParserQBSubQuery.ExprType, ColumnInfo> rightInfo =
-                        analyzeExpr(right);
+                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> leftInfo = analyzeExpr(left);
+                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> rightInfo = analyzeExpr(right);
 
                 return new HiveParserQBSubQuery.Conjunct(
                         left,
                         right,
-                        leftInfo.getFirst(),
-                        rightInfo.getFirst(),
-                        leftInfo.getSecond(),
-                        rightInfo.getSecond());
+                        leftInfo.getLeft(),
+                        rightInfo.getLeft(),
+                        leftInfo.getRight(),
+                        rightInfo.getRight());
             } else {
-                ObjectPair<HiveParserQBSubQuery.ExprType, ColumnInfo> sqExprInfo =
-                        analyzeExpr(conjunct);
+                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> sqExprInfo = analyzeExpr(conjunct);
                 return new HiveParserQBSubQuery.Conjunct(
                         conjunct,
                         null,
-                        sqExprInfo.getFirst(),
+                        sqExprInfo.getLeft(),
                         null,
-                        sqExprInfo.getSecond(),
-                        sqExprInfo.getSecond());
+                        sqExprInfo.getRight(),
+                        sqExprInfo.getRight());
             }
         }
 

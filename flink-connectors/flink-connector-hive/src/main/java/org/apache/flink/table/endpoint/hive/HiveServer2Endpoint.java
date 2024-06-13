@@ -53,6 +53,8 @@ import org.apache.hive.service.rpc.thrift.TCloseOperationReq;
 import org.apache.hive.service.rpc.thrift.TCloseOperationResp;
 import org.apache.hive.service.rpc.thrift.TCloseSessionReq;
 import org.apache.hive.service.rpc.thrift.TCloseSessionResp;
+import org.apache.hive.service.rpc.thrift.TDownloadDataReq;
+import org.apache.hive.service.rpc.thrift.TDownloadDataResp;
 import org.apache.hive.service.rpc.thrift.TExecuteStatementReq;
 import org.apache.hive.service.rpc.thrift.TExecuteStatementResp;
 import org.apache.hive.service.rpc.thrift.TFetchResultsReq;
@@ -97,6 +99,8 @@ import org.apache.hive.service.rpc.thrift.TSetClientInfoReq;
 import org.apache.hive.service.rpc.thrift.TSetClientInfoResp;
 import org.apache.hive.service.rpc.thrift.TStatus;
 import org.apache.hive.service.rpc.thrift.TStatusCode;
+import org.apache.hive.service.rpc.thrift.TUploadDataReq;
+import org.apache.hive.service.rpc.thrift.TUploadDataResp;
 import org.apache.thrift.TException;
 import org.apache.thrift.TProcessorFactory;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -116,7 +120,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static org.apache.flink.configuration.ExecutionOptions.RUNTIME_MODE;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_DML_SYNC;
@@ -167,8 +170,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
     private final int minWorkerThreads;
     private final int maxWorkerThreads;
     private final Duration workerKeepAliveTime;
-    private final int requestTimeoutMs;
-    private final int backOffSlotLengthMs;
     private final long maxMessageSize;
     private final boolean isVerbose;
 
@@ -195,8 +196,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
             SqlGatewayService service,
             InetSocketAddress socketAddress,
             long maxMessageSize,
-            int requestTimeoutMs,
-            int backOffSlotLengthMs,
             int minWorkerThreads,
             int maxWorkerThreads,
             Duration workerKeepAliveTime,
@@ -208,8 +207,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
                 service,
                 socketAddress,
                 maxMessageSize,
-                requestTimeoutMs,
-                backOffSlotLengthMs,
                 minWorkerThreads,
                 maxWorkerThreads,
                 workerKeepAliveTime,
@@ -226,8 +223,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
             SqlGatewayService service,
             InetSocketAddress socketAddress,
             long maxMessageSize,
-            int requestTimeoutMs,
-            int backOffSlotLengthMs,
             int minWorkerThreads,
             int maxWorkerThreads,
             Duration workerKeepAliveTime,
@@ -241,8 +236,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
 
         this.socketAddress = socketAddress;
         this.maxMessageSize = maxMessageSize;
-        this.requestTimeoutMs = requestTimeoutMs;
-        this.backOffSlotLengthMs = backOffSlotLengthMs;
         this.minWorkerThreads = minWorkerThreads;
         this.maxWorkerThreads = maxWorkerThreads;
         this.workerKeepAliveTime = checkNotNull(workerKeepAliveTime);
@@ -795,6 +788,19 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
     public TSetClientInfoResp SetClientInfo(TSetClientInfoReq tSetClientInfoReq) throws TException {
         return new TSetClientInfoResp(buildErrorStatus("SetClientInfo"));
     }
+
+    public TUploadDataResp UploadData(TUploadDataReq req) throws TException {
+        throw new TException(
+                new UnsupportedOperationException(
+                        String.format(UNSUPPORTED_ERROR_MESSAGE, "UploadData")));
+    }
+
+    @Override
+    public TDownloadDataResp DownloadData(TDownloadDataReq req) throws TException {
+        throw new TException(
+                new UnsupportedOperationException(
+                        String.format(UNSUPPORTED_ERROR_MESSAGE, "DownloadData")));
+    }
     // CHECKSTYLE.ON: MethodName
 
     @Override
@@ -810,8 +816,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
         return Objects.equals(socketAddress, that.socketAddress)
                 && minWorkerThreads == that.minWorkerThreads
                 && maxWorkerThreads == that.maxWorkerThreads
-                && requestTimeoutMs == that.requestTimeoutMs
-                && backOffSlotLengthMs == that.backOffSlotLengthMs
                 && maxMessageSize == that.maxMessageSize
                 && Objects.equals(workerKeepAliveTime, that.workerKeepAliveTime)
                 && Objects.equals(catalogName, that.catalogName)
@@ -828,8 +832,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
                 minWorkerThreads,
                 maxWorkerThreads,
                 workerKeepAliveTime,
-                requestTimeoutMs,
-                backOffSlotLengthMs,
                 maxMessageSize,
                 catalogName,
                 defaultDatabase,
@@ -869,10 +871,6 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
                                     .inputProtocolFactory(
                                             new TBinaryProtocol.Factory(
                                                     true, true, maxMessageSize, maxMessageSize))
-                                    .requestTimeout(requestTimeoutMs)
-                                    .requestTimeoutUnit(TimeUnit.MILLISECONDS)
-                                    .beBackoffSlotLength(backOffSlotLengthMs)
-                                    .beBackoffSlotLengthUnit(TimeUnit.MILLISECONDS)
                                     .executorService(executor));
         } catch (Exception e) {
             throw new SqlGatewayException("Failed to build the server.", e);
