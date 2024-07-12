@@ -37,8 +37,6 @@ import java.util.function.Supplier;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.CATALOG_DEFAULT_DATABASE;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.CATALOG_NAME;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.MODULE_NAME;
-import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.THRIFT_LOGIN_BEBACKOFF_SLOT_LENGTH;
-import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.THRIFT_LOGIN_TIMEOUT;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.THRIFT_MAX_MESSAGE_SIZE;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.THRIFT_WORKER_KEEPALIVE_TIME;
 import static org.apache.flink.table.endpoint.hive.HiveServer2EndpointConfigOptions.THRIFT_WORKER_THREADS_MAX;
@@ -73,8 +71,6 @@ public class HiveServer2EndpointExtension implements BeforeAllCallback, AfterAll
                         serviceSupplier.get(),
                         new InetSocketAddress(port.getPort()),
                         checkNotNull(endpointConfig.get(THRIFT_MAX_MESSAGE_SIZE)),
-                        (int) endpointConfig.get(THRIFT_LOGIN_TIMEOUT).toMillis(),
-                        (int) endpointConfig.get(THRIFT_LOGIN_BEBACKOFF_SLOT_LENGTH).toMillis(),
                         endpointConfig.get(THRIFT_WORKER_THREADS_MIN),
                         endpointConfig.get(THRIFT_WORKER_THREADS_MAX),
                         endpointConfig.get(THRIFT_WORKER_KEEPALIVE_TIME),
