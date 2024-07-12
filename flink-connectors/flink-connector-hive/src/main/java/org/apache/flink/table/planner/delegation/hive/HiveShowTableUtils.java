@@ -30,16 +30,14 @@ import org.apache.hadoop.hive.metastore.api.SerDeInfo;
 import org.apache.hadoop.hive.metastore.api.SkewedInfo;
 import org.apache.hadoop.hive.metastore.api.StorageDescriptor;
 import org.apache.hadoop.hive.ql.metadata.Table;
-import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
+import org.apache.hadoop.hive.ql.util.DirectionUtils;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hive.common.util.HiveStringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import static org.apache.hadoop.hive.metastore.api.hive_metastoreConstants.META_TABLE_STORAGE;
 
@@ -148,13 +146,11 @@ public class HiveShowTableUtils {
                     // Order
                     List<String> sortKeys = new ArrayList<String>();
                     for (Order sortCol : sortCols) {
-                        String sortKeyDesc = "  " + sortCol.getCol() + " ";
-                        if (sortCol.getOrder() == BaseSemanticAnalyzer.HIVE_COLUMN_ORDER_ASC) {
-                            sortKeyDesc = sortKeyDesc + "ASC";
-                        } else if (sortCol.getOrder()
-                                == BaseSemanticAnalyzer.HIVE_COLUMN_ORDER_DESC) {
-                            sortKeyDesc = sortKeyDesc + "DESC";
-                        }
+                        String sortKeyDesc =
+                                "  "
+                                        + sortCol.getCol()
+                                        + " "
+                                        + DirectionUtils.codeToText(sortCol.getOrder());
                         sortKeys.add(sortKeyDesc);
                     }
                     tblSortBucket += StringUtils.join(sortKeys, ", \n");
@@ -235,9 +231,7 @@ public class HiveShowTableUtils {
             }
 
             // Table properties
-            duplicateProps.addAll(
-                    Arrays.stream(StatsSetupConst.TABLE_PARAMS_STATS_KEYS)
-                            .collect(Collectors.toList()));
+            duplicateProps.addAll(StatsSetupConst.TABLE_PARAMS_STATS_KEYS);
             String tblProperties = propertiesToString(tbl.getParameters(), duplicateProps);
             createTabStringBuilder.append(String.format("TBLPROPERTIES (\n%s)\n", tblProperties));
             showCreateTableString = createTabStringBuilder.toString();

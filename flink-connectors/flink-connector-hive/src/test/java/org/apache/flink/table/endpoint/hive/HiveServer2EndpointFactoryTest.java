@@ -87,8 +87,6 @@ class HiveServer2EndpointFactoryTest {
                                         service,
                                         new InetSocketAddress("localhost", port),
                                         maxMessageSize,
-                                        (int) loginTimeout.toMillis(),
-                                        (int) backOffSlotLength.toMillis(),
                                         minWorkerThreads,
                                         maxWorkerThreads,
                                         workerAliveDuration,

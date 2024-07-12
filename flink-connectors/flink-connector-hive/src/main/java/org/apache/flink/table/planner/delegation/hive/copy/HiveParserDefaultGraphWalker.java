@@ -18,9 +18,9 @@
 
 package org.apache.flink.table.planner.delegation.hive.copy;
 
-import org.apache.hadoop.hive.ql.lib.Dispatcher;
-import org.apache.hadoop.hive.ql.lib.GraphWalker;
 import org.apache.hadoop.hive.ql.lib.Node;
+import org.apache.hadoop.hive.ql.lib.SemanticDispatcher;
+import org.apache.hadoop.hive.ql.lib.SemanticGraphWalker;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.Stack;
 
 /** Counterpart of hive's org.apache.hadoop.hive.ql.lib.DefaultGraphWalker. */
-public class HiveParserDefaultGraphWalker implements GraphWalker {
+public class HiveParserDefaultGraphWalker implements SemanticGraphWalker {
     // opStack keeps the nodes that have been visited, but have not been dispatched yet
     protected final Stack<Node> opStack;
     // opQueue keeps the nodes in the order that the were dispatched. Then it is used to go through
@@ -44,9 +44,9 @@ public class HiveParserDefaultGraphWalker implements GraphWalker {
     // toWalk stores the starting nodes for the graph that needs to be traversed
     protected final List<Node> toWalk = new ArrayList<>();
     protected final IdentityHashMap<Node, Object> retMap = new IdentityHashMap<>();
-    protected final Dispatcher dispatcher;
+    protected final SemanticDispatcher dispatcher;
 
-    public HiveParserDefaultGraphWalker(Dispatcher disp) {
+    public HiveParserDefaultGraphWalker(SemanticDispatcher disp) {
         dispatcher = disp;
         opStack = new Stack<>();
         opQueue = new LinkedList<>();

@@ -107,7 +107,7 @@ import org.apache.calcite.util.CompositeList;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
-import org.apache.hadoop.hive.common.ObjectPair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.ql.ErrorMsg;
@@ -950,7 +950,7 @@ public class HiveParserCalcitePlanner {
 
             HiveParserASTNode subQueryAST = subQueries.get(i);
             // HiveParserSubQueryUtils.rewriteParentQueryWhere(clonedSearchCond, subQueryAST);
-            ObjectPair<Boolean, Integer> subqInfo = new ObjectPair<>(false, 0);
+            MutablePair<Boolean, Integer> subqInfo = new MutablePair<>(false, 0);
             if (!topLevelConjunctCheck(clonedSearchCond, subqInfo)) {
                 // Restriction.7.h :: SubQuery predicates can appear only as top level conjuncts.
                 throw new SemanticException(
