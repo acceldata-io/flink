@@ -23,8 +23,8 @@ FLINK_BIN_DIR=`dirname "$0"`
 FLINK_BIN_DIR=`cd "$FLINK_BIN_DIR"; pwd`
   
 . "$FLINK_BIN_DIR"/bash-java-utils.sh
-  
-FLINK_CONF_DIR="$FLINK_BIN_DIR"/../conf
+
+FLINK_CONF_DIR=${FLINK_CONF_DIR:-"$FLINK_BIN_DIR"/../conf}
 echo "Using Flink configuration directory: $FLINK_CONF_DIR"
 setJavaRun "$FLINK_CONF_DIR"
 
