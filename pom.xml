@@ -185,7 +185,7 @@ under the License.
 			to revisit the impact at that time.
 		-->
 		<minikdc.version>3.2.4</minikdc.version>
-		<hive.version>2.3.9</hive.version>
+		<hive.version>4.0.0.3.3.6.0-1</hive.version>
 		<orc.version>1.5.6</orc.version>
 		<japicmp.referenceVersion>1.19.0</japicmp.referenceVersion>
 		<japicmp.outputDir>tools/japicmp-output</japicmp.outputDir>
@@ -2341,7 +2341,7 @@ under the License.
 				<plugin>
 					<groupId>com.github.siom79.japicmp</groupId>
 					<artifactId>japicmp-maven-plugin</artifactId>
-					<version>0.17.1</version>
+					<version>0.18.0</version>
 					<configuration>
 						<oldVersion>
 							<dependency>

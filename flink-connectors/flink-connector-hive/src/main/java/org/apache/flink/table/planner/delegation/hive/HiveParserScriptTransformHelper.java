@@ -200,7 +200,7 @@ public class HiveParserScriptTransformHelper {
 
         String serdeName = LazySimpleSerDe.class.getName();
         int fieldSeparator = Utilities.tabCode;
-        if (HiveConf.getBoolVar(hiveConf, HiveConf.ConfVars.HIVESCRIPTESCAPE)) {
+        if (HiveConf.getBoolVar(hiveConf, HiveConf.ConfVars.HIVE_SCRIPT_ESCAPE)) {
             fieldSeparator = Utilities.ctrlaCode;
         }
 

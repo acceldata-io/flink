@@ -135,7 +135,7 @@ public class HiveWriterFactory implements Serializable {
             JobConf conf = new JobConf(confWrapper.conf());
 
             if (isCompressed) {
-                String codecStr = conf.get(HiveConf.ConfVars.COMPRESSINTERMEDIATECODEC.varname);
+                String codecStr = conf.get(HiveConf.ConfVars.COMPRESS_INTERMEDIATE_CODEC.varname);
                 if (!StringUtils.isNullOrWhitespaceOnly(codecStr)) {
                     //noinspection unchecked
                     Class<? extends CompressionCodec> codec =
@@ -146,7 +146,7 @@ public class HiveWriterFactory implements Serializable {
                                             Thread.currentThread().getContextClassLoader());
                     FileOutputFormat.setOutputCompressorClass(conf, codec);
                 }
-                String typeStr = conf.get(HiveConf.ConfVars.COMPRESSINTERMEDIATETYPE.varname);
+                String typeStr = conf.get(HiveConf.ConfVars.COMPRESS_INTERMEDIATE_TYPE.varname);
                 if (!StringUtils.isNullOrWhitespaceOnly(typeStr)) {
                     SequenceFile.CompressionType style =
                             SequenceFile.CompressionType.valueOf(typeStr);
