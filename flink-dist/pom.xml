@@ -489,6 +489,12 @@ under the License.
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-test-utils-junit</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client-runtime</artifactId>
+			<version>${flink.hadoop.version}</version>
+		</dependency>
 		<!-- end test dependencies -->
 	</dependencies>
 
