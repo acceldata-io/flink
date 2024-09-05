@@ -55,8 +55,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.security.auth.login.LoginException;
 
-import com.google.common.base.Preconditions;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
@@ -102,8 +100,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
+import org.apache.hive.com.google.common.base.Preconditions;
+import org.apache.hive.com.google.common.annotations.VisibleForTesting;
+import org.apache.hive.com.google.common.collect.Lists;
 
 /**
  * Hive Metastore Client.
