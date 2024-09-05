@@ -1238,6 +1238,7 @@ under the License.
 						<configuration>
 							<artifactSet>
 								<includes combine.children="append">
+									<include>org.antlr:antlr-runtime</include>
 									<include>org.apache.flink:flink-hadoop-fs</include>
 									<include>org.apache.flink:flink-orc</include>
 									<include>org.apache.flink:flink-orc-nohive</include>
