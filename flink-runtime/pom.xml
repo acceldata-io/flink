@@ -186,6 +186,7 @@ under the License.
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-shaded-zookeeper-3</artifactId>
+			<version>3.5.10.3.2.3-${flink.shaded.version}</version>
 		</dependency>
 
 		<dependency>
