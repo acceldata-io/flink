@@ -18,9 +18,9 @@
 ################################################################################
 if [[ "$@" =~ 'apache-flink-libraries' ]]; then
     pushd apache-flink-libraries
-    python setup.py sdist
+    ambari-python-wrap setup.py sdist
     pushd dist
-    python -m pip install *
+    ambari-python-wrap -m pip install *
     popd
     popd
 fi
@@ -32,7 +32,7 @@ if [[ `uname -s` == "Darwin" && `uname -m` == "arm64" ]]; then
 fi
 
 retry_times=3
-install_command="python -m pip install $@"
+install_command="ambari-python-wrap -m pip install $@"
 ${install_command}
 status=$?
 while [[ ${status} -ne 0 ]] && [[ ${retry_times} -gt 0 ]]; do
