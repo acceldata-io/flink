@@ -19,4 +19,4 @@
 
 cd "$( dirname "$0" )"
 
-python pip_test_code.py
+ambari-python-wrap pip_test_code.py
