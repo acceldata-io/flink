@@ -60,6 +60,6 @@ if [[ "$?" == 0 ]] ; then
     echo "This pull request doesn't contain cython files change. Skipping the cython check."
 else
     # compile cython files
-    python setup.py build_ext --inplace --force
+    ambari-python-wrap setup.py build_ext --inplace --force
     test_all_modules
 fi
