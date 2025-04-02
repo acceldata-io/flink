@@ -62,6 +62,17 @@ under the License.
 			</snapshots>
 		</repository>
 		<repository>
+				<id>acceldata staging repo</id>
+				<name>acceldata staging repo</name>
+				<url>https://repo1.acceldata.dev/repository/odp-staging-central/</url>
+				<releases>
+			<enabled>true</enabled>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+		  </snapshots>
+		</repository>
+		<repository>
 			<id>repository.jboss.org</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 			<snapshots>
