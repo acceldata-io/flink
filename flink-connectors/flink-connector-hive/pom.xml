@@ -1304,7 +1304,7 @@ under the License.
 		<profile>
 			<id>hive3</id>
 			<properties>
-				<hive.version>4.0.0.3.3.6.2-1</hive.version>
+				<hive.version>4.0.1.3.3.6.2-1</hive.version>
 				<derby.version>10.14.1.0</derby.version>
 			</properties>
 
