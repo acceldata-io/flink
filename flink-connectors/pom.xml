@@ -78,7 +78,7 @@ under the License.
 				</property>
 			</activation>
 			<modules>
-				<module>flink-sql-connector-hive-4.0.0</module>
+				<module>flink-sql-connector-hive-4.0.1</module>
 			</modules>
 		</profile>
 	</profiles>
