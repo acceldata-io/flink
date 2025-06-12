@@ -35,6 +35,8 @@ import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslContextBuilder;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.util.FingerprintTrustManagerFactory;
 
+import org.eclipse.jetty.util.security.Password;
+
 import javax.annotation.Nullable;
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -63,7 +65,6 @@ import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.JD
 import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.OPENSSL;
 import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.OPENSSL_REFCNT;
 import static org.apache.flink.util.Preconditions.checkNotNull;
-import org.eclipse.jetty.util.security.Password;
 
 /** Common utilities to manage SSL transport settings. */
 public class SSLUtils {
