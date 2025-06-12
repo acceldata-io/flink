@@ -213,6 +213,7 @@ public class SSLUtils {
                                 ? SecurityOptions.SSL_INTERNAL_TRUSTSTORE_PASSWORD
                                 : SecurityOptions.SSL_REST_TRUSTSTORE_PASSWORD,
                         config.get(SecurityOptions.SSL_TRUSTSTORE_PASSWORD));
+        trustStorePassword = decryptPassword(trustStorePassword); // Decrypt OBF
 
         // Support for the REST client connecting to external HTTPS URLs to fall back to the
         // default trust store of the provider (JDK).
@@ -277,6 +278,7 @@ public class SSLUtils {
                                 ? SecurityOptions.SSL_INTERNAL_KEYSTORE_PASSWORD
                                 : SecurityOptions.SSL_REST_KEYSTORE_PASSWORD,
                         SecurityOptions.SSL_KEYSTORE_PASSWORD);
+        keystorePassword = decryptPassword(keystorePassword);
 
         String certPassword =
                 getAndCheckOption(
@@ -285,6 +287,8 @@ public class SSLUtils {
                                 ? SecurityOptions.SSL_INTERNAL_KEY_PASSWORD
                                 : SecurityOptions.SSL_REST_KEY_PASSWORD,
                         SecurityOptions.SSL_KEY_PASSWORD);
+//        certPassword = decryptPassword(certPassword);
+
 
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream keyStoreFile = Files.newInputStream(new File(keystoreFilePath).toPath())) {
@@ -303,7 +307,7 @@ public class SSLUtils {
     }
 
     private static String decryptPassword(String certPassword) {
-        if (certPassword.startsWith("OBF:")) {
+        if (certPassword != null && certPassword.startsWith("OBF:")) {
             return new Password(certPassword).toString();
         }
         return certPassword;
