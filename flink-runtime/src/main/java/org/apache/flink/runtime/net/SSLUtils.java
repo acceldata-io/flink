@@ -18,6 +18,7 @@
 
 package org.apache.flink.runtime.net;
 
+import org.eclipse.jetty.util.security.Password;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.Configuration;
