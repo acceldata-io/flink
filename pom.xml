@@ -196,6 +196,7 @@ under the License.
 		<hive.version>4.1.0.3.4.3.0-1</hive.version>
 		<orc.version>1.5.6</orc.version>
 		<japicmp.referenceVersion>2.2.0</japicmp.referenceVersion>
+		<jetty.version>9.4.56.v20240826</jetty.version>
 		<japicmp.outputDir>tools/japicmp-output</japicmp.outputDir>
 		<checkstyle.version>10.18.2</checkstyle.version>
 		<spotless.skip>false</spotless.skip>
