@@ -299,10 +299,9 @@ public class SSLUtils {
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         }
         kmf.init(keyStore,SSLUtils.decryptPassword(certPassword).toCharArray());
-
         return kmf;
     }
-    
+
     private static String decryptPassword(String certPassword){
         if (certPassword.startsWith("OBF:")){
             return new Password(certPassword).toString();
