@@ -302,12 +302,21 @@ public class SSLUtils {
 
         return kmf;
     }
-
     private static String decryptPassword(String certPassword) {
         if (certPassword.startsWith("OBF:")) {
-            return new Password(certPassword).toString();
+            return deobfuscate(certPassword.substring(4));
         }
         return certPassword;
+    }
+
+    private static String deobfuscate(String obfuscated) {
+        byte[] bytes = new byte[obfuscated.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            String pair = obfuscated.substring(2 * i, 2 * i + 2);
+            int decoded = Integer.parseInt(pair, 36);
+            bytes[i] = (byte) (decoded > 127 ? decoded - 256 : decoded);
+        }
+        return new String(bytes);
     }
 
     /**
