@@ -288,7 +288,7 @@ public class SSLUtils {
 
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream keyStoreFile = Files.newInputStream(new File(keystoreFilePath).toPath())) {
-            keyStore.load(keyStoreFile, keystorePassword.toCharArray());
+            keyStore.load(keyStoreFile, SSLUtils.decryptPassword(keystorePassword).toCharArray());
         }
 
         final KeyManagerFactory kmf;
