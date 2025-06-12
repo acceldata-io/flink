@@ -298,7 +298,8 @@ public class SSLUtils {
         } else {
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         }
-        kmf.init(keyStore,SSLUtils.decryptPassword(certPassword).toCharArray());
+        kmf.init(keyStore, SSLUtils.decryptPassword(certPassword).toCharArray());
+
         return kmf;
     }
 
