@@ -63,6 +63,7 @@ import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.JD
 import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.OPENSSL;
 import static org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider.OPENSSL_REFCNT;
 import static org.apache.flink.util.Preconditions.checkNotNull;
+import org.eclipse.jetty.util.security.Password;
 
 /** Common utilities to manage SSL transport settings. */
 public class SSLUtils {
@@ -287,7 +288,7 @@ public class SSLUtils {
 
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream keyStoreFile = Files.newInputStream(new File(keystoreFilePath).toPath())) {
-            keyStore.load(keyStoreFile, keystorePassword.toCharArray());
+            keyStore.load(keyStoreFile, SSLUtils.decryptPassword(keystorePassword).toCharArray());
         }
 
         final KeyManagerFactory kmf;
@@ -296,9 +297,16 @@ public class SSLUtils {
         } else {
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         }
-        kmf.init(keyStore, certPassword.toCharArray());
+        kmf.init(keyStore, SSLUtils.decryptPassword(certPassword).toCharArray());
 
         return kmf;
+    }
+
+    private static String decryptPassword(String certPassword) {
+        if (certPassword.startsWith("OBF:")) {
+            return new Password(certPassword).toString();
+        }
+        return certPassword;
     }
 
     /**

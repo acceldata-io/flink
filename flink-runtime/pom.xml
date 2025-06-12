@@ -318,6 +318,14 @@ under the License.
 			<artifactId>powermock-api-mockito2</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>9.4.56.v20240826</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
