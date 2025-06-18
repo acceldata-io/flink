@@ -1,0 +1,408 @@
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+index 165d593076e..6687113b4a3 100644
+--- a/.idea/vcs.xml
++++ b/.idea/vcs.xml
+@@ -22,4 +22,4 @@
+     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/docs/themes/book" vcs="Git" />
+   </component>
+-</project>
++</project>
+\ No newline at end of file
+diff --git a/flink-connectors/flink-connector-hive/pom.xml b/flink-connectors/flink-connector-hive/pom.xml
+index 76094aa7f44..2363e0db9ab 100644
+--- a/flink-connectors/flink-connector-hive/pom.xml
++++ b/flink-connectors/flink-connector-hive/pom.xml
+@@ -44,7 +44,7 @@ under the License.
+ 		java.lang.NoClassDefFoundError: org/apache/hadoop/metrics/Updater errors
+ 		Using this dedicated property avoids CI failures with the Hadoop 3 profile
+ 		-->
+-		<hive.hadoop.version>2.10.2</hive.hadoop.version>
++		<hive.hadoop.version>3.3.6.3.3.6.2-1</hive.hadoop.version>
+ 	</properties>
+ 
+ 	<dependencyManagement>
+@@ -54,6 +54,10 @@ under the License.
+ 				<artifactId>hadoop-common</artifactId>
+ 				<version>${hive.hadoop.version}</version>
+ 				<exclusions>
++					<exclusion>
++						<groupId>commons-beanutils</groupId>
++						<artifactId>commons-beanutils</artifactId>
++					</exclusion>
+ 					<exclusion>
+ 						<groupId>log4j</groupId>
+ 						<artifactId>log4j</artifactId>
+@@ -315,6 +319,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-connectors/flink-hadoop-compatibility/pom.xml b/flink-connectors/flink-hadoop-compatibility/pom.xml
+index 751f6c12257..6ddb8fb9769 100644
+--- a/flink-connectors/flink-hadoop-compatibility/pom.xml
++++ b/flink-connectors/flink-hadoop-compatibility/pom.xml
+@@ -64,6 +64,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-end-to-end-tests/flink-end-to-end-tests-hive/pom.xml b/flink-end-to-end-tests/flink-end-to-end-tests-hive/pom.xml
+index 513c952317e..49a48e0d74e 100644
+--- a/flink-end-to-end-tests/flink-end-to-end-tests-hive/pom.xml
++++ b/flink-end-to-end-tests/flink-end-to-end-tests-hive/pom.xml
+@@ -34,7 +34,7 @@ under the License.
+ 		java.lang.NoClassDefFoundError: org/apache/hadoop/metrics/Updater errors
+ 		Using this dedicated property avoids CI failures with the Hadoop 3 profile
+ 		-->
+-		<hive.hadoop.version>2.10.2</hive.hadoop.version>
++		<hive.hadoop.version>3.3.6.2-1</hive.hadoop.version>
+ 	</properties>
+ 
+ 
+@@ -62,6 +62,10 @@ under the License.
+ 			<version>${flink.hadoop.version}</version>
+ 			<scope>test</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/flink-end-to-end-tests/flink-sql-gateway-test/pom.xml b/flink-end-to-end-tests/flink-sql-gateway-test/pom.xml
+index 94a9aaa0d40..4431f858786 100644
+--- a/flink-end-to-end-tests/flink-sql-gateway-test/pom.xml
++++ b/flink-end-to-end-tests/flink-sql-gateway-test/pom.xml
+@@ -109,6 +109,10 @@ under the License.
+             <version>${flink.hadoop.version}</version>
+             <scope>test</scope>
+             <exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+                 <exclusion>
+                     <groupId>log4j</groupId>
+                     <artifactId>log4j</artifactId>
+diff --git a/flink-filesystems/flink-fs-hadoop-shaded/pom.xml b/flink-filesystems/flink-fs-hadoop-shaded/pom.xml
+index 2d53896c07f..da9be22981a 100644
+--- a/flink-filesystems/flink-fs-hadoop-shaded/pom.xml
++++ b/flink-filesystems/flink-fs-hadoop-shaded/pom.xml
+@@ -54,6 +54,10 @@ under the License.
+ 			<version>${fs.hadoopshaded.version}</version>
+ 			<optional>${flink.markBundledAsOptional}</optional>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>jdk.tools</groupId>
+ 					<artifactId>jdk.tools</artifactId>
+diff --git a/flink-filesystems/flink-gs-fs-hadoop/pom.xml b/flink-filesystems/flink-gs-fs-hadoop/pom.xml
+index df23833ef3d..a79dabd8d95 100644
+--- a/flink-filesystems/flink-gs-fs-hadoop/pom.xml
++++ b/flink-filesystems/flink-gs-fs-hadoop/pom.xml
+@@ -162,6 +162,10 @@ under the License.
+ 				<artifactId>hadoop-common</artifactId>
+ 				<version>${fs.hadoopshaded.version}</version>
+ 				<exclusions>
++					<exclusion>
++						<groupId>commons-beanutils</groupId>
++						<artifactId>commons-beanutils</artifactId>
++					</exclusion>
+ 					<exclusion>
+ 						<groupId>ch.qos.reload4j</groupId>
+ 						<artifactId>reload4j</artifactId>
+diff --git a/flink-filesystems/flink-hadoop-fs/pom.xml b/flink-filesystems/flink-hadoop-fs/pom.xml
+index 38ac1048f96..5a3f2b7fb3d 100644
+--- a/flink-filesystems/flink-hadoop-fs/pom.xml
++++ b/flink-filesystems/flink-hadoop-fs/pom.xml
+@@ -65,6 +65,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<optional>true</optional>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+@@ -147,6 +151,10 @@ under the License.
+ 			<type>test-jar</type>
+ 			<version>${flink.hadoop.version}</version><!--$NO-MVN-MAN-VER$-->
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/flink-filesystems/flink-s3-fs-base/pom.xml b/flink-filesystems/flink-s3-fs-base/pom.xml
+index 579dc78f4a8..5e08168fd62 100644
+--- a/flink-filesystems/flink-s3-fs-base/pom.xml
++++ b/flink-filesystems/flink-s3-fs-base/pom.xml
+@@ -59,6 +59,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<version>${fs.hadoopshaded.version}</version>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>jdk.tools</groupId>
+ 					<artifactId>jdk.tools</artifactId>
+diff --git a/flink-filesystems/flink-s3-fs-hadoop/pom.xml b/flink-filesystems/flink-s3-fs-hadoop/pom.xml
+index 84e1aa4c3e6..d0e4e4aa410 100644
+--- a/flink-filesystems/flink-s3-fs-hadoop/pom.xml
++++ b/flink-filesystems/flink-s3-fs-hadoop/pom.xml
+@@ -40,6 +40,10 @@ under the License.
+ 				<artifactId>hadoop-common</artifactId>
+ 				<version>${fs.hadoopshaded.version}</version>
+ 				<exclusions>
++					<exclusion>
++						<groupId>commons-beanutils</groupId>
++						<artifactId>commons-beanutils</artifactId>
++					</exclusion>
+ 					<exclusion>
+ 						<groupId>ch.qos.reload4j</groupId>
+ 						<artifactId>reload4j</artifactId>
+diff --git a/flink-filesystems/flink-s3-fs-presto/pom.xml b/flink-filesystems/flink-s3-fs-presto/pom.xml
+index f5603620771..a911f00ee78 100644
+--- a/flink-filesystems/flink-s3-fs-presto/pom.xml
++++ b/flink-filesystems/flink-s3-fs-presto/pom.xml
+@@ -365,6 +365,10 @@ under the License.
+ 				<version>${fs.hadoopshaded.version}</version>
+ 				<optional>${flink.markBundledAsOptional}</optional>
+ 				<exclusions>
++					<exclusion>
++						<groupId>commons-beanutils</groupId>
++						<artifactId>commons-beanutils</artifactId>
++					</exclusion>
+ 					<exclusion>
+ 						<groupId>jdk.tools</groupId>
+ 						<artifactId>jdk.tools</artifactId>
+diff --git a/flink-formats/flink-compress/pom.xml b/flink-formats/flink-compress/pom.xml
+index ad81f9d992f..6045242012c 100644
+--- a/flink-formats/flink-compress/pom.xml
++++ b/flink-formats/flink-compress/pom.xml
+@@ -47,6 +47,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-formats/flink-hadoop-bulk/pom.xml b/flink-formats/flink-hadoop-bulk/pom.xml
+index 01d6cf07090..c753967557a 100644
+--- a/flink-formats/flink-hadoop-bulk/pom.xml
++++ b/flink-formats/flink-hadoop-bulk/pom.xml
+@@ -58,6 +58,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+@@ -139,6 +143,10 @@ under the License.
+ 			<type>test-jar</type>
+ 			<version>${flink.hadoop.version}</version>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/flink-formats/flink-orc/pom.xml b/flink-formats/flink-orc/pom.xml
+index 70a996c31ec..3651b03cbd1 100644
+--- a/flink-formats/flink-orc/pom.xml
++++ b/flink-formats/flink-orc/pom.xml
+@@ -117,6 +117,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-formats/flink-parquet/pom.xml b/flink-formats/flink-parquet/pom.xml
+index 0298620a9c3..90297731465 100644
+--- a/flink-formats/flink-parquet/pom.xml
++++ b/flink-formats/flink-parquet/pom.xml
+@@ -100,6 +100,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>com.google.protobuf</groupId>
+ 					<artifactId>protobuf-java</artifactId>
+diff --git a/flink-formats/flink-sequence-file/pom.xml b/flink-formats/flink-sequence-file/pom.xml
+index 62464a924e3..4dd89945410 100644
+--- a/flink-formats/flink-sequence-file/pom.xml
++++ b/flink-formats/flink-sequence-file/pom.xml
+@@ -48,6 +48,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>provided</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-fs-tests/pom.xml b/flink-fs-tests/pom.xml
+index 8c1f8d06bdd..ddc90befae9 100644
+--- a/flink-fs-tests/pom.xml
++++ b/flink-fs-tests/pom.xml
+@@ -47,6 +47,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>test</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+@@ -160,6 +164,10 @@ under the License.
+ 			<type>test-jar</type>
+ 			<version>${flink.hadoop.version}</version><!--$NO-MVN-MAN-VER$-->
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/flink-runtime/pom.xml b/flink-runtime/pom.xml
+index a9000d6749c..e209b6ea2bf 100644
+--- a/flink-runtime/pom.xml
++++ b/flink-runtime/pom.xml
+@@ -121,6 +121,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<optional>true</optional>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-tests/pom.xml b/flink-tests/pom.xml
+index 1771b643478..31d7c44570d 100644
+--- a/flink-tests/pom.xml
++++ b/flink-tests/pom.xml
+@@ -105,6 +105,10 @@ under the License.
+ 			<artifactId>hadoop-common</artifactId>
+ 			<scope>test</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+diff --git a/flink-yarn-tests/pom.xml b/flink-yarn-tests/pom.xml
+index db5db07c95f..f3f38965615 100644
+--- a/flink-yarn-tests/pom.xml
++++ b/flink-yarn-tests/pom.xml
+@@ -133,6 +133,10 @@ under the License.
+ 			<version>${flink.hadoop.version}</version>
+ 			<scope>test</scope>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/flink-yarn/pom.xml b/flink-yarn/pom.xml
+index 0c9a05afdcd..82e846ed8e3 100644
+--- a/flink-yarn/pom.xml
++++ b/flink-yarn/pom.xml
+@@ -60,6 +60,10 @@ under the License.
+ 			<groupId>org.apache.hadoop</groupId>
+ 			<artifactId>hadoop-common</artifactId>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>ch.qos.reload4j</groupId>
+ 					<artifactId>reload4j</artifactId>
+@@ -176,6 +180,10 @@ under the License.
+ 			<type>test-jar</type>
+ 			<version>${flink.hadoop.version}</version>
+ 			<exclusions>
++				<exclusion>
++					<groupId>commons-beanutils</groupId>
++					<artifactId>commons-beanutils</artifactId>
++				</exclusion>
+ 				<exclusion>
+ 					<groupId>log4j</groupId>
+ 					<artifactId>log4j</artifactId>
+diff --git a/pom.xml b/pom.xml
+index 6aff474c871..0cbca20b79f 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -142,7 +142,7 @@ under the License.
+ 	<properties>
+ 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+-		<flink.hadoop.version>2.10.2</flink.hadoop.version>
++		<flink.hadoop.version>3.3.6.3.3.6.2-1</flink.hadoop.version>
+ 		<flink.XmxMax>3072m</flink.XmxMax>
+ 		<!-- XmxMax / forkCountITCase -->
+ 		<flink.XmxITCase>1536m</flink.XmxITCase>
+@@ -411,6 +411,10 @@ under the License.
+ 				<artifactId>hadoop-common</artifactId>
+ 				<version>${flink.hadoop.version}</version>
+ 				<exclusions>
++					<exclusion>
++						<groupId>commons-beanutils</groupId>
++						<artifactId>commons-beanutils</artifactId>
++					</exclusion>
+ 					<exclusion>
+ 						<groupId>jdk.tools</groupId>
+ 						<artifactId>jdk.tools</artifactId>
