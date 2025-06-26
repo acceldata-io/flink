@@ -53,6 +53,10 @@ under the License.
 			<optional>${flink.markBundledAsOptional}</optional>
 			<exclusions>
 				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>log4j</groupId>
 					<artifactId>log4j</artifactId>
 				</exclusion>

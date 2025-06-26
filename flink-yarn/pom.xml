@@ -61,6 +61,10 @@ under the License.
 			<artifactId>hadoop-common</artifactId>
 			<exclusions>
 				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>ch.qos.reload4j</groupId>
 					<artifactId>reload4j</artifactId>
 				</exclusion>
@@ -176,6 +180,10 @@ under the License.
 			<type>test-jar</type>
 			<version>${flink.hadoop.version}</version>
 			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>log4j</groupId>
 					<artifactId>log4j</artifactId>
