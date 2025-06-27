@@ -156,6 +156,7 @@ under the License.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<version>${maven.shade.plugin.version}</version>
 				<executions>
 					<!-- Include runtime specific dependencies, janino and json-path. Jackson is packaged by flink distribution -->
 					<execution>
