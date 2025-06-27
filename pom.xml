@@ -203,6 +203,7 @@ under the License.
 		<spotless.skip>false</spotless.skip>
 		<spotless.version>2.43.0</spotless.version>
 		<spotless.scalafmt.version>3.4.3</spotless.scalafmt.version>
+		<maven.shade.plugin.version>3.6.0</maven.shade.plugin.version>
 		<spotless.delimiter>package</spotless.delimiter>
 		<spotless.license.header>
 /*
@@ -2050,6 +2051,7 @@ under the License.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<version>${maven.shade.plugin.version}</version>
 				<configuration>
 					<!-- This section contains the core configuration that is applied to every jar that we create.-->
 					<filters combine.children="append">
