@@ -93,12 +93,14 @@ public class PasswordManager {
                             "Successfully resolved password using resolver: {}",
                             resolver.getName());
                     return resolved;
+                } catch (PasswordResolutionException e) {
+                    // If a resolver claims it can handle the password but fails,
+                    // we should not try other resolvers - this is a configuration error
+                    throw e;
                 } catch (Exception e) {
-                    LOG.warn(
-                            "Resolver '{}' failed to resolve password: {}",
-                            resolver.getName(),
-                            e.getMessage());
-                    // Continue to next resolver
+                    // For unexpected exceptions, wrap and throw
+                    throw new PasswordResolutionException(
+                            "Resolver '" + resolver.getName() + "' failed to resolve password", e);
                 }
             }
         }
