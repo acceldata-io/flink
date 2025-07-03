@@ -29,22 +29,24 @@ import org.apache.flink.security.passwords.PasswordResolver;
  * <p>Format: KMS:key-id:encrypted-data
  *
  * <p>Example:
+ *
  * <pre>
  * security.ssl.internal.keystore-password: KMS:arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012:AQECAHhEncryptedData...
  * </pre>
  *
- * <p><strong>Note:</strong> This is an example implementation showing how to integrate
- * with external Key Management Systems. To use this resolver:
+ * <p><strong>Note:</strong> This is an example implementation showing how to integrate with
+ * external Key Management Systems. To use this resolver:
+ *
  * <ol>
- *   <li>Add AWS SDK dependencies to your Flink distribution</li>
- *   <li>Configure AWS credentials (IAM roles, access keys, etc.)</li>
- *   <li>Ensure the Flink process has permissions to decrypt using the specified KMS key</li>
- *   <li>Register this resolver via ServiceLoader or include it in the classpath</li>
+ *   <li>Add AWS SDK dependencies to your Flink distribution
+ *   <li>Configure AWS credentials (IAM roles, access keys, etc.)
+ *   <li>Ensure the Flink process has permissions to decrypt using the specified KMS key
+ *   <li>Register this resolver via ServiceLoader or include it in the classpath
  * </ol>
  *
- * <p>This implementation is disabled by default since it requires external dependencies.
- * Enable it by implementing the actual KMS integration and removing the exception in
- * {@link #resolve(String, Configuration)}.
+ * <p>This implementation is disabled by default since it requires external dependencies. Enable it
+ * by implementing the actual KMS integration and removing the exception in {@link #resolve(String,
+ * Configuration)}.
  */
 @PublicEvolving
 public class AwsKmsPasswordResolver implements PasswordResolver {
@@ -57,16 +59,17 @@ public class AwsKmsPasswordResolver implements PasswordResolver {
     }
 
     @Override
-    public String resolve(String password, Configuration config) throws PasswordResolutionException {
+    public String resolve(String password, Configuration config)
+            throws PasswordResolutionException {
         // This is an example implementation - actual integration would require AWS SDK
         throw new PasswordResolutionException(
-            "AWS KMS password resolver is not implemented. " +
-            "This is an example showing how to integrate with external Key Management Systems. " +
-            "To implement:\n" +
-            "1. Add AWS SDK dependencies\n" +
-            "2. Configure AWS credentials\n" +
-            "3. Implement the KMS decryption logic below\n" +
-            "4. Register the resolver via ServiceLoader");
+                "AWS KMS password resolver is not implemented. "
+                        + "This is an example showing how to integrate with external Key Management Systems. "
+                        + "To implement:\n"
+                        + "1. Add AWS SDK dependencies\n"
+                        + "2. Configure AWS credentials\n"
+                        + "3. Implement the KMS decryption logic below\n"
+                        + "4. Register the resolver via ServiceLoader");
 
         /*
          * Example implementation (requires AWS SDK):

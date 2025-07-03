@@ -31,13 +31,10 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Tests for the {@link PasswordManager} and related password resolution functionality.
- */
+/** Tests for the {@link PasswordManager} and related password resolution functionality. */
 class PasswordManagerTest {
 
-    @TempDir
-    Path tempDir;
+    @TempDir Path tempDir;
 
     @Test
     void testPlaintextPasswordResolution() throws Exception {

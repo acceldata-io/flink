@@ -20,9 +20,7 @@ package org.apache.flink.security.passwords;
 
 import org.apache.flink.annotation.PublicEvolving;
 
-/**
- * Exception thrown when password resolution fails.
- */
+/** Exception thrown when password resolution fails. */
 @PublicEvolving
 public class PasswordResolutionException extends Exception {
 

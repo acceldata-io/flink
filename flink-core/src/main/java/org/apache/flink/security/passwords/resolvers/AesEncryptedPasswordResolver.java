@@ -19,7 +19,6 @@
 package org.apache.flink.security.passwords.resolvers;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.SecurityOptions;
 import org.apache.flink.security.passwords.PasswordResolutionException;
 import org.apache.flink.security.passwords.PasswordResolver;
 
@@ -38,17 +37,19 @@ import java.util.Base64;
  *
  * <p>Format: ENC:base64-encoded-encrypted-data
  *
- * <p>This resolver provides strong encryption using AES-256-GCM with authentication.
- * The encryption key is derived from a master key file or configuration property.
+ * <p>This resolver provides strong encryption using AES-256-GCM with authentication. The encryption
+ * key is derived from a master key file or configuration property.
  *
  * <p>Key sources (in order of precedence):
+ *
  * <ol>
- *   <li>security.ssl.encryption.key-file (path to file containing key)</li>
- *   <li>security.ssl.encryption.key (base64-encoded key in config)</li>
- *   <li>FLINK_SSL_ENCRYPTION_KEY environment variable</li>
+ *   <li>security.ssl.encryption.key-file (path to file containing key)
+ *   <li>security.ssl.encryption.key (base64-encoded key in config)
+ *   <li>FLINK_SSL_ENCRYPTION_KEY environment variable
  * </ol>
  *
  * <p>To generate an encrypted password:
+ *
  * <pre>
  * java -cp flink-dist.jar org.apache.flink.security.passwords.PasswordEncryptionTool \
  *   --password "mypassword" --key-file /path/to/key
@@ -74,7 +75,8 @@ public class AesEncryptedPasswordResolver implements PasswordResolver {
     }
 
     @Override
-    public String resolve(String password, Configuration config) throws PasswordResolutionException {
+    public String resolve(String password, Configuration config)
+            throws PasswordResolutionException {
         try {
             String encryptedData = password.substring(PREFIX.length());
             byte[] encryptedBytes = Base64.getDecoder().decode(encryptedData);
@@ -117,15 +119,21 @@ public class AesEncryptedPasswordResolver implements PasswordResolver {
         }
 
         throw new PasswordResolutionException(
-            "No encryption key found. Please set one of: " +
-            KEY_FILE_CONFIG + ", " + KEY_CONFIG + ", or " + KEY_ENV_VAR + " environment variable");
+                "No encryption key found. Please set one of: "
+                        + KEY_FILE_CONFIG
+                        + ", "
+                        + KEY_CONFIG
+                        + ", or "
+                        + KEY_ENV_VAR
+                        + " environment variable");
     }
 
     private byte[] readKeyFromFile(String keyFilePath) throws PasswordResolutionException {
         try {
             Path path = Paths.get(keyFilePath);
             if (!Files.exists(path)) {
-                throw new PasswordResolutionException("Encryption key file not found: " + keyFilePath);
+                throw new PasswordResolutionException(
+                        "Encryption key file not found: " + keyFilePath);
             }
 
             byte[] keyBytes = Files.readAllBytes(path);
@@ -133,7 +141,8 @@ public class AesEncryptedPasswordResolver implements PasswordResolver {
             return Base64.getDecoder().decode(keyString);
 
         } catch (Exception e) {
-            throw new PasswordResolutionException("Failed to read encryption key from file: " + keyFilePath, e);
+            throw new PasswordResolutionException(
+                    "Failed to read encryption key from file: " + keyFilePath, e);
         }
     }
 

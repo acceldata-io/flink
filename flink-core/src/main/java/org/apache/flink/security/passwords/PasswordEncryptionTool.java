@@ -30,13 +30,15 @@ import java.util.Base64;
  * Command-line tool for generating encryption keys and encrypting passwords.
  *
  * <p>This tool helps users securely manage SSL passwords by providing:
+ *
  * <ul>
- *   <li>Generation of strong encryption keys</li>
- *   <li>Encryption of passwords using AES-256-GCM</li>
- *   <li>Support for key files and direct key input</li>
+ *   <li>Generation of strong encryption keys
+ *   <li>Encryption of passwords using AES-256-GCM
+ *   <li>Support for key files and direct key input
  * </ul>
  *
  * <p>Usage examples:
+ *
  * <pre>
  * # Generate a new encryption key
  * password-encryption-tool.sh --generate-key
@@ -57,28 +59,28 @@ import java.util.Base64;
 public class PasswordEncryptionTool {
 
     private static final String USAGE =
-        "Flink Password Encryption Tool\n" +
-        "\n" +
-        "Usage:\n" +
-        "  Generate encryption key:\n" +
-        "    password-encryption-tool.sh --generate-key [--output-file <path>]\n" +
-        "\n" +
-        "  Encrypt password:\n" +
-        "    password-encryption-tool.sh --encrypt [--password <password>] \\\n" +
-        "                                 (--key-file <path> | --key <base64-key>)\n" +
-        "\n" +
-        "Options:\n" +
-        "  --generate-key        Generate a new AES-256 encryption key\n" +
-        "  --encrypt             Encrypt a password\n" +
-        "  --password <pwd>      Password to encrypt (if not provided, will prompt)\n" +
-        "  --key-file <path>     Path to file containing encryption key\n" +
-        "  --key <base64>        Base64-encoded encryption key\n" +
-        "  --output-file <path>  Output file for generated key\n" +
-        "  --help               Show this help message\n" +
-        "\n" +
-        "Security Note:\n" +
-        "  Keep your encryption key secure! If the key is compromised,\n" +
-        "  all encrypted passwords can be decrypted.\n";
+            "Flink Password Encryption Tool\n"
+                    + "\n"
+                    + "Usage:\n"
+                    + "  Generate encryption key:\n"
+                    + "    password-encryption-tool.sh --generate-key [--output-file <path>]\n"
+                    + "\n"
+                    + "  Encrypt password:\n"
+                    + "    password-encryption-tool.sh --encrypt [--password <password>] \\\n"
+                    + "                                 (--key-file <path> | --key <base64-key>)\n"
+                    + "\n"
+                    + "Options:\n"
+                    + "  --generate-key        Generate a new AES-256 encryption key\n"
+                    + "  --encrypt             Encrypt a password\n"
+                    + "  --password <pwd>      Password to encrypt (if not provided, will prompt)\n"
+                    + "  --key-file <path>     Path to file containing encryption key\n"
+                    + "  --key <base64>        Base64-encoded encryption key\n"
+                    + "  --output-file <path>  Output file for generated key\n"
+                    + "  --help               Show this help message\n"
+                    + "\n"
+                    + "Security Note:\n"
+                    + "  Keep your encryption key secure! If the key is compromised,\n"
+                    + "  all encrypted passwords can be decrypted.\n";
 
     public static void main(String[] args) {
         try {
@@ -131,8 +133,9 @@ public class PasswordEncryptionTool {
         if (password == null) {
             Console console = System.console();
             if (console == null) {
-                System.err.println("Error: No console available for password input. " +
-                                   "Use --password option instead.");
+                System.err.println(
+                        "Error: No console available for password input. "
+                                + "Use --password option instead.");
                 System.exit(1);
             }
 

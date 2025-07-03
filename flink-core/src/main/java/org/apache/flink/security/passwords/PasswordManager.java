@@ -32,19 +32,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 /**
  * Central manager for password resolution using pluggable resolvers.
  *
- * <p>This manager coordinates multiple {@link PasswordResolver} implementations
- * to provide secure password resolution from various sources and formats.
+ * <p>This manager coordinates multiple {@link PasswordResolver} implementations to provide secure
+ * password resolution from various sources and formats.
  *
  * <p>Built-in resolvers include:
+ *
  * <ul>
- *   <li>AES Encrypted passwords (ENC:base64-encrypted-value)</li>
- *   <li>Environment variables (ENV:VARIABLE_NAME)</li>
- *   <li>Jetty OBF obfuscated passwords (OBF:obfuscated-value) - for backward compatibility</li>
- *   <li>Plaintext passwords (fallback)</li>
+ *   <li>AES Encrypted passwords (ENC:base64-encrypted-value)
+ *   <li>Environment variables (ENV:VARIABLE_NAME)
+ *   <li>Jetty OBF obfuscated passwords (OBF:obfuscated-value) - for backward compatibility
+ *   <li>Plaintext passwords (fallback)
  * </ul>
  *
  * <p>Additional resolvers can be registered via the ServiceLoader mechanism.
@@ -62,8 +64,10 @@ public class PasswordManager {
         loadExternalResolvers();
         sortResolversByPriority();
 
-        LOG.info("Initialized password manager with {} resolvers: {}",
-                resolvers.size(), getResolverNames());
+        LOG.info(
+                "Initialized password manager with {} resolvers: {}",
+                resolvers.size(),
+                getResolverNames());
     }
 
     /**
@@ -85,19 +89,24 @@ public class PasswordManager {
             if (resolver.canResolve(password)) {
                 try {
                     String resolved = resolver.resolve(password, config);
-                    LOG.debug("Successfully resolved password using resolver: {}", resolver.getName());
+                    LOG.debug(
+                            "Successfully resolved password using resolver: {}",
+                            resolver.getName());
                     return resolved;
                 } catch (Exception e) {
-                    LOG.warn("Resolver '{}' failed to resolve password: {}",
-                            resolver.getName(), e.getMessage());
+                    LOG.warn(
+                            "Resolver '{}' failed to resolve password: {}",
+                            resolver.getName(),
+                            e.getMessage());
                     // Continue to next resolver
                 }
             }
         }
 
         throw new PasswordResolutionException(
-                "No resolver found that can handle the password format. " +
-                "Available resolvers: " + getResolverNames());
+                "No resolver found that can handle the password format. "
+                        + "Available resolvers: "
+                        + getResolverNames());
     }
 
     private void loadBuiltInResolvers() {
@@ -121,14 +130,10 @@ public class PasswordManager {
     }
 
     private List<String> getResolverNames() {
-        return resolvers.stream()
-                .map(PasswordResolver::getName)
-                .toList();
+        return resolvers.stream().map(PasswordResolver::getName).collect(Collectors.toList());
     }
 
-    /**
-     * Gets the list of registered resolvers for testing purposes.
-     */
+    /** Gets the list of registered resolvers for testing purposes. */
     List<PasswordResolver> getResolvers() {
         return new ArrayList<>(resolvers);
     }

@@ -498,10 +498,10 @@ public class SecurityOptions {
                     .stringType()
                     .noDefaultValue()
                     .withDescription(
-                            "Path to file containing the base64-encoded AES-256 encryption key " +
-                            "for encrypting SSL passwords. This key is used to decrypt passwords " +
-                            "with the ENC: prefix format. The file should contain only the " +
-                            "base64-encoded key string.");
+                            "Path to file containing the base64-encoded AES-256 encryption key "
+                                    + "for encrypting SSL passwords. This key is used to decrypt passwords "
+                                    + "with the ENC: prefix format. The file should contain only the "
+                                    + "base64-encoded key string.");
 
     /** Direct AES encryption key for password encryption. */
     @Documentation.Section(Documentation.Sections.SECURITY_SSL)
@@ -510,11 +510,11 @@ public class SecurityOptions {
                     .stringType()
                     .noDefaultValue()
                     .withDescription(
-                            "Base64-encoded AES-256 encryption key for encrypting SSL passwords. " +
-                            "This key is used to decrypt passwords with the ENC: prefix format. " +
-                            "For security, prefer using security.ssl.encryption.key-file or " +
-                            "the FLINK_SSL_ENCRYPTION_KEY environment variable instead of " +
-                            "storing the key directly in configuration files.");
+                            "Base64-encoded AES-256 encryption key for encrypting SSL passwords. "
+                                    + "This key is used to decrypt passwords with the ENC: prefix format. "
+                                    + "For security, prefer using security.ssl.encryption.key-file or "
+                                    + "the FLINK_SSL_ENCRYPTION_KEY environment variable instead of "
+                                    + "storing the key directly in configuration files.");
 
     // ------------------------ ssl parameters --------------------------------
 

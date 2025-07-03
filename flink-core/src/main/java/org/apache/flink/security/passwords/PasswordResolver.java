@@ -24,9 +24,9 @@ import org.apache.flink.configuration.Configuration;
 /**
  * Interface for resolving passwords from various sources and formats.
  *
- * <p>This interface allows for pluggable password resolution implementations,
- * supporting various security mechanisms like encryption, obfuscation,
- * external secret management systems, and Key Management Systems (KMS).
+ * <p>This interface allows for pluggable password resolution implementations, supporting various
+ * security mechanisms like encryption, obfuscation, external secret management systems, and Key
+ * Management Systems (KMS).
  *
  * <p>Implementations should be stateless and thread-safe.
  */

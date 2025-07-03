@@ -28,13 +28,13 @@ import org.apache.flink.security.passwords.PasswordResolver;
  * <p>Format: ENV:VARIABLE_NAME
  *
  * <p>Example:
+ *
  * <pre>
  * security.ssl.internal.keystore-password: ENV:SSL_KEYSTORE_PASSWORD
  * </pre>
  *
- * <p>This allows passwords to be injected via environment variables, which is
- * useful for containerized deployments and CI/CD pipelines where secrets
- * management is handled externally.
+ * <p>This allows passwords to be injected via environment variables, which is useful for
+ * containerized deployments and CI/CD pipelines where secrets management is handled externally.
  */
 public class EnvironmentVariablePasswordResolver implements PasswordResolver {
 
@@ -46,7 +46,8 @@ public class EnvironmentVariablePasswordResolver implements PasswordResolver {
     }
 
     @Override
-    public String resolve(String password, Configuration config) throws PasswordResolutionException {
+    public String resolve(String password, Configuration config)
+            throws PasswordResolutionException {
         String variableName = password.substring(PREFIX.length()).trim();
 
         if (variableName.isEmpty()) {
@@ -56,7 +57,7 @@ public class EnvironmentVariablePasswordResolver implements PasswordResolver {
         String value = System.getenv(variableName);
         if (value == null) {
             throw new PasswordResolutionException(
-                "Environment variable '" + variableName + "' is not set");
+                    "Environment variable '" + variableName + "' is not set");
         }
 
         return value;
