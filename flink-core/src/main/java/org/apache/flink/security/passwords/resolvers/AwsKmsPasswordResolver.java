@@ -30,7 +30,7 @@ import org.apache.flink.security.passwords.PasswordResolver;
  *
  * <p>Example:
  * <pre>
- * security.ssl.internal.keystore-password: KMS:arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012:AQECAHhXXXXX...
+ * security.ssl.internal.keystore-password: KMS:arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012:AQECAHhEncryptedData...
  * </pre>
  *
  * <p><strong>Note:</strong> This is an example implementation showing how to integrate
