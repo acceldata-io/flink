@@ -25,14 +25,14 @@ import org.apache.flink.security.passwords.PasswordResolver;
 
 /**
  * Example password resolver that integrates with AWS Key Management Service (KMS).
- * 
+ *
  * <p>Format: KMS:key-id:encrypted-data
- * 
+ *
  * <p>Example:
  * <pre>
  * security.ssl.internal.keystore-password: KMS:arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012:AQECAHhXXXXX...
  * </pre>
- * 
+ *
  * <p><strong>Note:</strong> This is an example implementation showing how to integrate
  * with external Key Management Systems. To use this resolver:
  * <ol>
@@ -41,7 +41,7 @@ import org.apache.flink.security.passwords.PasswordResolver;
  *   <li>Ensure the Flink process has permissions to decrypt using the specified KMS key</li>
  *   <li>Register this resolver via ServiceLoader or include it in the classpath</li>
  * </ol>
- * 
+ *
  * <p>This implementation is disabled by default since it requires external dependencies.
  * Enable it by implementing the actual KMS integration and removing the exception in
  * {@link #resolve(String, Configuration)}.
@@ -67,33 +67,33 @@ public class AwsKmsPasswordResolver implements PasswordResolver {
             "2. Configure AWS credentials\n" +
             "3. Implement the KMS decryption logic below\n" +
             "4. Register the resolver via ServiceLoader");
-        
+
         /*
          * Example implementation (requires AWS SDK):
-         * 
+         *
          * try {
          *     String[] parts = password.substring(PREFIX.length()).split(":", 2);
          *     if (parts.length != 2) {
          *         throw new PasswordResolutionException("Invalid KMS format. Expected: KMS:key-id:encrypted-data");
          *     }
-         *     
+         *
          *     String keyId = parts[0];
          *     String encryptedData = parts[1];
-         *     
+         *
          *     // Initialize AWS KMS client
          *     KmsClient kmsClient = KmsClient.builder()
          *         .region(Region.of(config.getString("aws.region", "us-east-1")))
          *         .build();
-         *     
+         *
          *     // Decrypt the password
          *     DecryptRequest decryptRequest = DecryptRequest.builder()
          *         .keyId(keyId)
          *         .ciphertextBlob(SdkBytes.fromByteArray(Base64.getDecoder().decode(encryptedData)))
          *         .build();
-         *     
+         *
          *     DecryptResponse response = kmsClient.decrypt(decryptRequest);
          *     return response.plaintext().asUtf8String();
-         *     
+         *
          * } catch (Exception e) {
          *     throw new PasswordResolutionException("Failed to decrypt password using AWS KMS", e);
          * }
@@ -109,4 +109,4 @@ public class AwsKmsPasswordResolver implements PasswordResolver {
     public String getName() {
         return "AWS KMS Password Resolver";
     }
-} 
+}

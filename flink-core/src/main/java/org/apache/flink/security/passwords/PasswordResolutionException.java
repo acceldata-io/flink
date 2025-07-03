@@ -39,4 +39,4 @@ public class PasswordResolutionException extends Exception {
     public PasswordResolutionException(Throwable cause) {
         super(cause);
     }
-} 
+}

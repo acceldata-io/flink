@@ -35,10 +35,10 @@ import java.util.ServiceLoader;
 
 /**
  * Central manager for password resolution using pluggable resolvers.
- * 
+ *
  * <p>This manager coordinates multiple {@link PasswordResolver} implementations
  * to provide secure password resolution from various sources and formats.
- * 
+ *
  * <p>Built-in resolvers include:
  * <ul>
  *   <li>AES Encrypted passwords (ENC:base64-encrypted-value)</li>
@@ -46,26 +46,26 @@ import java.util.ServiceLoader;
  *   <li>Jetty OBF obfuscated passwords (OBF:obfuscated-value) - for backward compatibility</li>
  *   <li>Plaintext passwords (fallback)</li>
  * </ul>
- * 
+ *
  * <p>Additional resolvers can be registered via the ServiceLoader mechanism.
  */
 @Internal
 public class PasswordManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(PasswordManager.class);
-    
+
     private final List<PasswordResolver> resolvers;
-    
+
     public PasswordManager() {
         this.resolvers = new ArrayList<>();
         loadBuiltInResolvers();
         loadExternalResolvers();
         sortResolversByPriority();
-        
-        LOG.info("Initialized password manager with {} resolvers: {}", 
+
+        LOG.info("Initialized password manager with {} resolvers: {}",
                 resolvers.size(), getResolverNames());
     }
-    
+
     /**
      * Resolves a password using the available resolvers.
      *
@@ -74,13 +74,13 @@ public class PasswordManager {
      * @return the resolved plaintext password
      * @throws PasswordResolutionException if no resolver can handle the password
      */
-    public String resolvePassword(String password, Configuration config) 
+    public String resolvePassword(String password, Configuration config)
             throws PasswordResolutionException {
-        
+
         if (password == null || password.isEmpty()) {
             throw new PasswordResolutionException("Password cannot be null or empty");
         }
-        
+
         for (PasswordResolver resolver : resolvers) {
             if (resolver.canResolve(password)) {
                 try {
@@ -88,18 +88,18 @@ public class PasswordManager {
                     LOG.debug("Successfully resolved password using resolver: {}", resolver.getName());
                     return resolved;
                 } catch (Exception e) {
-                    LOG.warn("Resolver '{}' failed to resolve password: {}", 
+                    LOG.warn("Resolver '{}' failed to resolve password: {}",
                             resolver.getName(), e.getMessage());
                     // Continue to next resolver
                 }
             }
         }
-        
+
         throw new PasswordResolutionException(
                 "No resolver found that can handle the password format. " +
                 "Available resolvers: " + getResolverNames());
     }
-    
+
     private void loadBuiltInResolvers() {
         // Order matters - more secure resolvers should have higher priority
         resolvers.add(new AesEncryptedPasswordResolver());
@@ -107,7 +107,7 @@ public class PasswordManager {
         resolvers.add(new JettyObfuscatedPasswordResolver());
         resolvers.add(new PlaintextPasswordResolver()); // Fallback with lowest priority
     }
-    
+
     private void loadExternalResolvers() {
         ServiceLoader<PasswordResolver> serviceLoader = ServiceLoader.load(PasswordResolver.class);
         for (PasswordResolver resolver : serviceLoader) {
@@ -115,21 +115,21 @@ public class PasswordManager {
             LOG.info("Loaded external password resolver: {}", resolver.getName());
         }
     }
-    
+
     private void sortResolversByPriority() {
         resolvers.sort(Comparator.comparingInt(PasswordResolver::getPriority).reversed());
     }
-    
+
     private List<String> getResolverNames() {
         return resolvers.stream()
                 .map(PasswordResolver::getName)
                 .toList();
     }
-    
+
     /**
      * Gets the list of registered resolvers for testing purposes.
      */
     List<PasswordResolver> getResolvers() {
         return new ArrayList<>(resolvers);
     }
-} 
+}

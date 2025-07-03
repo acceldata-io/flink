@@ -24,14 +24,14 @@ import org.apache.flink.security.passwords.PasswordResolver;
 
 /**
  * Password resolver that handles plaintext passwords.
- * 
+ *
  * <p>This resolver serves as the fallback for all passwords that don't match
  * any other resolver format. It simply returns the password as-is.
- * 
+ *
  * <p><strong>Security Warning:</strong> Plaintext passwords are a security risk
  * as they are stored in configuration files without any protection. Consider
  * using encrypted passwords (ENC:) or environment variables (ENV:) instead.
- * 
+ *
  * <p>This resolver is provided for backward compatibility and should have the
  * lowest priority so it's only used when no other resolver can handle the password.
  */
@@ -60,4 +60,4 @@ public class PlaintextPasswordResolver implements PasswordResolver {
     public String getName() {
         return "Plaintext Password Resolver";
     }
-} 
+}

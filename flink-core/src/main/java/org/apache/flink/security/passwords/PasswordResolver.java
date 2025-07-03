@@ -23,11 +23,11 @@ import org.apache.flink.configuration.Configuration;
 
 /**
  * Interface for resolving passwords from various sources and formats.
- * 
+ *
  * <p>This interface allows for pluggable password resolution implementations,
- * supporting various security mechanisms like encryption, obfuscation, 
+ * supporting various security mechanisms like encryption, obfuscation,
  * external secret management systems, and Key Management Systems (KMS).
- * 
+ *
  * <p>Implementations should be stateless and thread-safe.
  */
 @PublicEvolving
@@ -53,7 +53,7 @@ public interface PasswordResolver {
 
     /**
      * Gets the priority of this resolver. Higher priority resolvers are tried first.
-     * 
+     *
      * @return the priority (higher values = higher priority)
      */
     default int getPriority() {
@@ -66,4 +66,4 @@ public interface PasswordResolver {
      * @return the resolver name
      */
     String getName();
-} 
+}

@@ -28,35 +28,35 @@ import java.util.Base64;
 
 /**
  * Command-line tool for generating encryption keys and encrypting passwords.
- * 
+ *
  * <p>This tool helps users securely manage SSL passwords by providing:
  * <ul>
  *   <li>Generation of strong encryption keys</li>
  *   <li>Encryption of passwords using AES-256-GCM</li>
  *   <li>Support for key files and direct key input</li>
  * </ul>
- * 
+ *
  * <p>Usage examples:
  * <pre>
  * # Generate a new encryption key
  * password-encryption-tool.sh --generate-key
- * 
+ *
  * # Generate key and save to file
  * password-encryption-tool.sh --generate-key --output-file /path/to/key
- * 
+ *
  * # Encrypt a password using a key file
  * password-encryption-tool.sh --encrypt --key-file /path/to/key
- * 
+ *
  * # Encrypt a password using a key directly
  * password-encryption-tool.sh --encrypt --key "base64-encoded-key"
- * 
+ *
  * # Encrypt a specific password (non-interactive)
  * password-encryption-tool.sh --encrypt --password "mypassword" --key-file /path/to/key
  * </pre>
  */
 public class PasswordEncryptionTool {
 
-    private static final String USAGE = 
+    private static final String USAGE =
         "Flink Password Encryption Tool\n" +
         "\n" +
         "Usage:\n" +
@@ -104,7 +104,7 @@ public class PasswordEncryptionTool {
 
     private static void generateKey(String[] args) throws Exception {
         String key = AesEncryptedPasswordResolver.generateKey();
-        
+
         String outputFile = getArgValue(args, "--output-file");
         if (outputFile != null) {
             Path path = Paths.get(outputFile);
@@ -125,7 +125,7 @@ public class PasswordEncryptionTool {
     private static void encryptPassword(String[] args) throws Exception {
         // Get the encryption key
         byte[] key = getEncryptionKey(args);
-        
+
         // Get the password to encrypt
         String password = getArgValue(args, "--password");
         if (password == null) {
@@ -135,7 +135,7 @@ public class PasswordEncryptionTool {
                                    "Use --password option instead.");
                 System.exit(1);
             }
-            
+
             char[] passwordChars = console.readPassword("Enter password to encrypt: ");
             if (passwordChars == null || passwordChars.length == 0) {
                 System.err.println("Error: No password provided");
@@ -145,10 +145,10 @@ public class PasswordEncryptionTool {
             // Clear the password from memory
             java.util.Arrays.fill(passwordChars, ' ');
         }
-        
+
         // Encrypt the password
         String encryptedPassword = AesEncryptedPasswordResolver.encrypt(password, key);
-        
+
         System.out.println("Encrypted password:");
         System.out.println(encryptedPassword);
         System.out.println();
@@ -161,15 +161,15 @@ public class PasswordEncryptionTool {
     private static byte[] getEncryptionKey(String[] args) throws Exception {
         String keyFile = getArgValue(args, "--key-file");
         String keyBase64 = getArgValue(args, "--key");
-        
+
         if (keyFile == null && keyBase64 == null) {
             throw new IllegalArgumentException("Either --key-file or --key must be provided");
         }
-        
+
         if (keyFile != null && keyBase64 != null) {
             throw new IllegalArgumentException("Cannot specify both --key-file and --key");
         }
-        
+
         if (keyFile != null) {
             Path path = Paths.get(keyFile);
             if (!Files.exists(path)) {
@@ -200,4 +200,4 @@ public class PasswordEncryptionTool {
         }
         return null;
     }
-} 
+}

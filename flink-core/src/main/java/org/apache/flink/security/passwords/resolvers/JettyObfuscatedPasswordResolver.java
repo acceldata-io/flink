@@ -26,20 +26,20 @@ import org.eclipse.jetty.util.security.Password;
 
 /**
  * Password resolver that handles Jetty OBF obfuscated passwords.
- * 
+ *
  * <p>Format: OBF:obfuscated-value
- * 
+ *
  * <p><strong>Security Note:</strong> OBF obfuscation is NOT encryption and provides
  * minimal security. It is easily reversible and should only be used for backward
  * compatibility. For new deployments, prefer AES encryption (ENC:) or environment
  * variables (ENV:).
- * 
+ *
  * <p>To generate OBF passwords:
  * <pre>
  * java -cp flink/opt/flink-azure-fs-hadoop-*.jar \
  *   org.eclipse.jetty.util.security.Password mypassword
  * </pre>
- * 
+ *
  * <p>This resolver maintains backward compatibility with existing Flink configurations
  * that use OBF obfuscated passwords.
  */
@@ -70,4 +70,4 @@ public class JettyObfuscatedPasswordResolver implements PasswordResolver {
     public String getName() {
         return "Jetty OBF Obfuscated Password Resolver";
     }
-} 
+}
