@@ -24,6 +24,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.SecurityOptions;
 import org.apache.flink.runtime.io.network.netty.SSLHandlerFactory;
+import org.apache.flink.security.passwords.PasswordManager;
+import org.apache.flink.security.passwords.PasswordResolutionException;
 import org.apache.flink.util.StringUtils;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.ClientAuth;
@@ -34,9 +36,6 @@ import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslContext;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslContextBuilder;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.util.FingerprintTrustManagerFactory;
-
-import org.apache.flink.security.passwords.PasswordManager;
-import org.apache.flink.security.passwords.PasswordResolutionException;
 
 import javax.annotation.Nullable;
 import javax.net.ServerSocketFactory;
@@ -239,7 +238,9 @@ public class SSLUtils {
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream trustStoreFile =
                 Files.newInputStream(new File(trustStoreFilePath).toPath())) {
-            trustStore.load(trustStoreFile, SSLUtils.decryptPassword(trustStorePassword, config).toCharArray());
+            trustStore.load(
+                    trustStoreFile,
+                    SSLUtils.decryptPassword(trustStorePassword, config).toCharArray());
         }
 
         String certFingerprint =
@@ -290,7 +291,8 @@ public class SSLUtils {
 
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream keyStoreFile = Files.newInputStream(new File(keystoreFilePath).toPath())) {
-            keyStore.load(keyStoreFile, SSLUtils.decryptPassword(keystorePassword, config).toCharArray());
+            keyStore.load(
+                    keyStoreFile, SSLUtils.decryptPassword(keystorePassword, config).toCharArray());
         }
 
         final KeyManagerFactory kmf;
