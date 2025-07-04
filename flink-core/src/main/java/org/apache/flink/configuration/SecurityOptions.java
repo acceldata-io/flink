@@ -489,6 +489,33 @@ public class SecurityOptions {
                                     + "This further protects the rest REST endpoints to present certificate which is only used by proxy server"
                                     + "This is necessary where once uses public CA or internal firm wide CA");
 
+    // ----------------------- password encryption --------------------------------
+
+    /** File path containing the AES encryption key for password encryption. */
+    @Documentation.Section(Documentation.Sections.SECURITY_SSL)
+    public static final ConfigOption<String> SSL_ENCRYPTION_KEY_FILE =
+            key("security.ssl.encryption.key-file")
+                    .stringType()
+                    .noDefaultValue()
+                    .withDescription(
+                            "Path to file containing the base64-encoded AES-256 encryption key "
+                                    + "for encrypting SSL passwords. This key is used to decrypt passwords "
+                                    + "with the ENC: prefix format. The file should contain only the "
+                                    + "base64-encoded key string.");
+
+    /** Direct AES encryption key for password encryption. */
+    @Documentation.Section(Documentation.Sections.SECURITY_SSL)
+    public static final ConfigOption<String> SSL_ENCRYPTION_KEY =
+            key("security.ssl.encryption.key")
+                    .stringType()
+                    .noDefaultValue()
+                    .withDescription(
+                            "Base64-encoded AES-256 encryption key for encrypting SSL passwords. "
+                                    + "This key is used to decrypt passwords with the ENC: prefix format. "
+                                    + "For security, prefer using security.ssl.encryption.key-file or "
+                                    + "the FLINK_SSL_ENCRYPTION_KEY environment variable instead of "
+                                    + "storing the key directly in configuration files.");
+
     // ------------------------ ssl parameters --------------------------------
 
     /** SSL protocol version to be supported. */
