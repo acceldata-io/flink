@@ -1780,6 +1780,7 @@ under the License.
 
 						<!-- The most recently published version configuration file -->
 						<exclude>flink-test-utils-parent/flink-migration-test-utils/src/main/resources/most_recently_published_version</exclude>
+						<exclude>debian/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
