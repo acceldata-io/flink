@@ -249,6 +249,7 @@ under the License.
 		<!-- Can be set to any value to reproduce a specific build. -->
 		<test.randomization.seed/>
 		<test.unit.pattern>**/*Test.*</test.unit.pattern>
+		<commons-lang3.version>3.18.0</commons-lang3.version>
 	</properties>
 
 	<dependencies>
@@ -570,7 +571,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.12.0</version>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 
 			<dependency>
