@@ -44,6 +44,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -323,14 +324,16 @@ class PekkoUtils {
                         configuration.get(SecurityOptions.SSL_KEYSTORE));
 
         final String sslKeyStorePassword =
-                configuration.get(
-                        SecurityOptions.SSL_INTERNAL_KEYSTORE_PASSWORD,
-                        configuration.get(SecurityOptions.SSL_KEYSTORE_PASSWORD));
+                decryptPassword(
+                        configuration.get(
+                                SecurityOptions.SSL_INTERNAL_KEYSTORE_PASSWORD,
+                                configuration.get(SecurityOptions.SSL_KEYSTORE_PASSWORD)));
 
         final String sslKeyPassword =
-                configuration.get(
-                        SecurityOptions.SSL_INTERNAL_KEY_PASSWORD,
-                        configuration.get(SecurityOptions.SSL_KEY_PASSWORD));
+                decryptPassword(
+                        configuration.get(
+                                SecurityOptions.SSL_INTERNAL_KEY_PASSWORD,
+                                configuration.get(SecurityOptions.SSL_KEY_PASSWORD)));
 
         final String sslTrustStore =
                 configuration.get(
@@ -338,9 +341,10 @@ class PekkoUtils {
                         configuration.get(SecurityOptions.SSL_TRUSTSTORE));
 
         final String sslTrustStorePassword =
-                configuration.get(
-                        SecurityOptions.SSL_INTERNAL_TRUSTSTORE_PASSWORD,
-                        configuration.get(SecurityOptions.SSL_TRUSTSTORE_PASSWORD));
+                decryptPassword(
+                        configuration.get(
+                                SecurityOptions.SSL_INTERNAL_TRUSTSTORE_PASSWORD,
+                                configuration.get(SecurityOptions.SSL_TRUSTSTORE_PASSWORD)));
 
         final String sslCertFingerprintString =
                 configuration.get(SecurityOptions.SSL_INTERNAL_CERT_FINGERPRINT);
@@ -605,6 +609,48 @@ class PekkoUtils {
 
     private static String booleanToOnOrOff(boolean flag) {
         return flag ? "on" : "off";
+    }
+
+    /**
+     * Decrypts an obfuscated password if it starts with "OBF:", otherwise returns the password
+     * as-is. This implements the Jetty OBF deobfuscation algorithm.
+     *
+     * @param password the potentially obfuscated password
+     * @return the decrypted password
+     */
+    private static String decryptPassword(String password) {
+        if (password != null && password.startsWith("OBF:")) {
+            return deobfuscate(password);
+        }
+        return password;
+    }
+
+    /**
+     * Deobfuscates a Jetty OBF-encoded string. The OBF format is a simple obfuscation (not
+     * encryption) that encodes each character using base-36 arithmetic.
+     *
+     * @param obfuscated the obfuscated string starting with "OBF:"
+     * @return the deobfuscated string
+     */
+    private static String deobfuscate(String obfuscated) {
+        String s = obfuscated.substring(4); // Remove "OBF:" prefix
+        byte[] b = new byte[s.length() / 2];
+        int l = 0;
+        for (int i = 0; i < s.length(); i += 4) {
+            if (s.charAt(i) == 'U') {
+                i++;
+                String x = s.substring(i, i + 4);
+                int i0 = Integer.parseInt(x, 36);
+                b[l++] = (byte) (i0 >> 8);
+            } else {
+                String x = s.substring(i, i + 4);
+                int i0 = Integer.parseInt(x, 36);
+                int i1 = i0 / 256;
+                int i2 = i0 % 256;
+                b[l++] = (byte) ((i1 + i2 - 254) / 2);
+            }
+        }
+        return new String(b, 0, l, StandardCharsets.UTF_8);
     }
 
     private static class ConfigBuilder {
