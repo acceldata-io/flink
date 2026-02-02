@@ -238,7 +238,7 @@ public class SSLUtils {
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (InputStream trustStoreFile =
                 Files.newInputStream(new File(trustStoreFilePath).toPath())) {
-            trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
+            trustStore.load(trustStoreFile, decryptPassword(trustStorePassword).toCharArray());
         }
 
         String certFingerprint =
