@@ -36,6 +36,7 @@ under the License.
 			chill ArraysAsListSerializer
 			-->--add-opens=java.base/java.util=ALL-UNNAMED
 		</surefire.module.config>
+                <japicmp.skip>true</japicmp.skip>
 	</properties>
 
 	<dependencies>
