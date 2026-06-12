@@ -35,6 +35,7 @@ under the License.
 	<packaging>jar</packaging>
 
 	<properties>
+		<odp.release.version>3.3.6.5-SNAPSHOT</odp.release.version>
 		<hiverunner.version>4.0.0</hiverunner.version>
 		<reflections.version>0.9.8</reflections.version>
 		<derby.version>10.10.2.0</derby.version>
@@ -44,7 +45,7 @@ under the License.
 		java.lang.NoClassDefFoundError: org/apache/hadoop/metrics/Updater errors
 		Using this dedicated property avoids CI failures with the Hadoop 3 profile
 		-->
-		<hive.hadoop.version>3.3.6.3.3.6.5-SNAPSHOT</hive.hadoop.version>
+		<hive.hadoop.version>3.3.6.${odp.release.version}</hive.hadoop.version>
 	</properties>
 
 	<dependencyManagement>
@@ -1305,7 +1306,7 @@ under the License.
 		<profile>
 			<id>hive3</id>
 			<properties>
-				<hive.version>4.0.1.3.3.6.5-SNAPSHOT</hive.version>
+				<hive.version>4.0.1.${odp.release.version}</hive.version>
 				<derby.version>10.14.1.0</derby.version>
 			</properties>
 
