@@ -725,7 +725,8 @@ public class HiveParserBaseSemanticAnalyzer {
 
         HiveParserTypeCheckCtx typeCheckCtx =
                 new HiveParserTypeCheckCtx(null, frameworkConfig, cluster);
-        String defaultPartitionName = HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULTPARTITIONNAME);
+        String defaultPartitionName =
+                HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_PARTITION_NAME);
         boolean result = true;
         for (Node childNode : astNode.getChildren()) {
             HiveParserASTNode childASTNode = (HiveParserASTNode) childNode;
@@ -2201,7 +2202,7 @@ public class HiveParserBaseSemanticAnalyzer {
                 if (numDynParts > 0) {
                     int numStaPart = parts.size() - numDynParts;
                     if (numStaPart == 0
-                            && conf.getVar(HiveConf.ConfVars.DYNAMICPARTITIONINGMODE)
+                            && conf.getVar(HiveConf.ConfVars.DYNAMIC_PARTITIONING_MODE)
                                     .equalsIgnoreCase("strict")) {
                         throw new SemanticException(
                                 ErrorMsg.DYNAMIC_PARTITION_STRICT_MODE.getMsg());
