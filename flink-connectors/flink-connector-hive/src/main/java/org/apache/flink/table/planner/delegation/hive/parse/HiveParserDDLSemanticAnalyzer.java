@@ -292,7 +292,8 @@ public class HiveParserDDLSemanticAnalyzer {
         this.functionCatalog = calciteContext.getFunctionCatalog();
         reservedPartitionValues = new HashSet<>();
         // Partition can't have this name
-        reservedPartitionValues.add(HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULTPARTITIONNAME));
+        reservedPartitionValues.add(
+                HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_PARTITION_NAME));
         reservedPartitionValues.add(
                 HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_ZOOKEEPER_PARTITION_NAME));
         // Partition value can't end in this suffix
@@ -1800,7 +1801,7 @@ public class HiveParserDDLSemanticAnalyzer {
         return new ShowPartitionsOperation(
                 tableIdentifier,
                 spec,
-                HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULTPARTITIONNAME));
+                HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_PARTITION_NAME));
     }
 
     private Operation convertShowDatabases() {
