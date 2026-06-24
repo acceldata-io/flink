@@ -185,6 +185,11 @@ under the License.
 								<filter>
 									<artifact>org.apache.hive:hive-exec</artifact>
 									<excludes>
+										<!-- hive-exec is a multi-release JAR whose META-INF/versions/22 entries
+										     are compiled for Java 22 (class major version 66). The shade plugin
+										     cannot parse them when building on JDK 8, and they are never used at
+										     runtime on JDK 8/11 anyway, so drop them. -->
+										<exclude>META-INF/versions/**</exclude>
 										<exclude>avro/shaded/com/google/**</exclude>
 										<exclude>org/apache/avro/**</exclude>
 										<exclude>META-INF/maven/org.apache.avro/**</exclude>
