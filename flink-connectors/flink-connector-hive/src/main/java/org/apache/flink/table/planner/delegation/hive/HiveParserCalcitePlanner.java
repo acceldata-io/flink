@@ -1262,7 +1262,7 @@ public class HiveParserCalcitePlanner {
                         || !qbp.getDestCubes().isEmpty();
 
         // 2. Sanity check
-        if (semanticAnalyzer.getConf().getBoolVar(HiveConf.ConfVars.HIVEGROUPBYSKEW)
+        if (semanticAnalyzer.getConf().getBoolVar(HiveConf.ConfVars.HIVE_GROUPBY_SKEW)
                 && qbp.getDistinctFuncExprsForClause(detsClauseName).size() > 1) {
             throw new SemanticException(ErrorMsg.UNSUPPORTED_MULTIPLE_DISTINCTS.getMsg());
         }
@@ -1611,7 +1611,7 @@ public class HiveParserCalcitePlanner {
             Integer limit = qb.getParseInfo().getDestLimit(dest);
             if (limit == null) {
                 String mapRedMode =
-                        semanticAnalyzer.getConf().getVar(HiveConf.ConfVars.HIVEMAPREDMODE);
+                        semanticAnalyzer.getConf().getVar(HiveConf.ConfVars.HIVE_MAPRED_MODE);
                 boolean banLargeQuery =
                         Boolean.parseBoolean(
                                 semanticAnalyzer

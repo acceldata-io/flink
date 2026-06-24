@@ -165,11 +165,12 @@ public class SqlGatewayE2ECase extends TestLogger {
                                         .toURI()))) {
             hiveConf.addResource(inputStream, HiveCatalog.HIVE_SITE_FILE);
             // trigger a read from the conf so that the input stream is read
-            hiveConf.getVar(HiveConf.ConfVars.METASTOREURIS);
+            hiveConf.getVar(HiveConf.ConfVars.METASTORE_URIS);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load hive-site.xml from specified path", e);
         }
-        hiveConf.set(HiveConf.ConfVars.METASTOREURIS.varname, HIVE_CONTAINER.getHiveMetastoreURI());
+        hiveConf.set(
+                HiveConf.ConfVars.METASTORE_URIS.varname, HIVE_CONTAINER.getHiveMetastoreURI());
         try {
             File site = FOLDER.newFile(HiveCatalog.HIVE_SITE_FILE);
             try (OutputStream out = new FileOutputStream(site)) {

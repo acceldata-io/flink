@@ -177,7 +177,7 @@ public class HiveParserLoadSemanticAnalyzer {
 
         // for managed tables, make sure the file formats match
         if (TableType.MANAGED_TABLE.equals(table.getTableType())
-                && conf.getBoolVar(HiveConf.ConfVars.HIVECHECKFILEFORMAT)) {
+                && conf.getBoolVar(HiveConf.ConfVars.HIVE_CHECK_FILEFORMAT)) {
             ensureFileFormatsMatch(ts, table, files, fromURI);
         }
 
