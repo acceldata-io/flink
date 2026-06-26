@@ -1106,7 +1106,7 @@ under the License.
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-sql-gateway</artifactId>
@@ -1306,7 +1306,7 @@ under the License.
 		<profile>
 			<id>hive3</id>
 			<properties>
-				<hive.version>4.0.1.${odp.release.version}</hive.version>
+				<hive.version>4.1.0.${odp.release.version}</hive.version>
 				<derby.version>10.14.1.0</derby.version>
 			</properties>
 
