@@ -1643,7 +1643,7 @@ public class HiveParserSemanticAnalyzer {
                                             (CatalogTable) ts.table,
                                             ts.partHandle);
                         }
-                        if (HiveConf.getBoolVar(conf, HiveConf.ConfVars.HIVESTATSAUTOGATHER)) {
+                        if (HiveConf.getBoolVar(conf, HiveConf.ConfVars.HIVE_STATS_AUTOGATHER)) {
                             // Add the table spec for the destination table.
                             qb.getParseInfo()
                                     .addTableSpec(
@@ -1689,7 +1689,7 @@ public class HiveParserSemanticAnalyzer {
                                     }
                                 }
                                 if (HiveConf.getBoolVar(
-                                        conf, HiveConf.ConfVars.HIVESTATSAUTOGATHER)) {
+                                        conf, HiveConf.ConfVars.HIVE_STATS_AUTOGATHER)) {
                                     TableSpec ts =
                                             new TableSpec(
                                                     catalogRegistry,
