@@ -35,6 +35,8 @@ import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslContextBuilder;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.SslProvider;
 import org.apache.flink.shaded.netty4.io.netty.handler.ssl.util.FingerprintTrustManagerFactory;
 
+import org.eclipse.jetty.util.security.Password;
+
 import javax.annotation.Nullable;
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -242,7 +244,7 @@ public class SSLUtils {
         KeyStore trustStore = KeyStore.getInstance(truststoreType);
         try (InputStream trustStoreFile =
                 Files.newInputStream(new File(trustStoreFilePath).toPath())) {
-            trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
+            trustStore.load(trustStoreFile, decryptPassword(trustStorePassword).toCharArray());
         }
 
         String certFingerprint =
@@ -303,7 +305,7 @@ public class SSLUtils {
 
         KeyStore keyStore = KeyStore.getInstance(keystoreType);
         try (InputStream keyStoreFile = Files.newInputStream(new File(keystoreFilePath).toPath())) {
-            keyStore.load(keyStoreFile, keystorePassword.toCharArray());
+            keyStore.load(keyStoreFile, decryptPassword(keystorePassword).toCharArray());
         }
 
         final KeyManagerFactory kmf;
@@ -312,9 +314,24 @@ public class SSLUtils {
         } else {
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         }
-        kmf.init(keyStore, certPassword.toCharArray());
+        kmf.init(keyStore, decryptPassword(certPassword).toCharArray());
 
         return kmf;
+    }
+
+    /**
+     * De-obfuscates an SSL password if it carries Jetty's {@code OBF:} prefix, otherwise returns it
+     * unchanged.
+     *
+     * <p>Note this is obfuscation rather than encryption: an {@code OBF:} value is reversible by
+     * anyone holding it. It exists so passwords need not appear in plain text in configuration
+     * files, matching the convention used elsewhere in the ODP stack.
+     */
+    private static String decryptPassword(String password) {
+        if (password.startsWith("OBF:")) {
+            return new Password(password).toString();
+        }
+        return password;
     }
 
     /**

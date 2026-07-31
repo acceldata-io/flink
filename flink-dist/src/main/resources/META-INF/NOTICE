@@ -16,6 +16,7 @@ This project bundles the following dependencies under the Apache Software Licens
 - org.apache.commons:commons-lang3:3.18.0
 - org.apache.commons:commons-math3:3.6.1
 - org.apache.commons:commons-text:1.10.0
+- org.eclipse.jetty:jetty-util:9.4.56.v20240826
 - org.javassist:javassist:3.24.0-GA
 - at.yawk.lz4:lz4-java:1.10.3
 - org.objenesis:objenesis:3.4

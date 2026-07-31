@@ -319,6 +319,15 @@ under the License.
 			<artifactId>mockito-subclass</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Provides org.eclipse.jetty.util.security.Password, used by SSLUtils to
+			 de-obfuscate OBF: prefixed SSL passwords. -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>${jetty.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
