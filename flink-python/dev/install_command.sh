@@ -19,7 +19,7 @@
 if [[ "$@" =~ 'apache-flink-libraries' ]]; then
     # As of Python 3.12, setuptools is no longer a seed package.
     # We should ensure its existence.
-    python -m pip install setuptools
+    ambari-python-wrap -m pip install setuptools
     pushd apache-flink-libraries
     ambari-python-wrap setup.py sdist
     pushd dist
