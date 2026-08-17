@@ -49,6 +49,15 @@ under the License.
 
 	<dependencyManagement>
 		<dependencies>
+			<!--
+			Pin antlr-runtime. Transitive resolution otherwise selects 3.3, whose
+			BaseTree lacks insertChild(int, Object); HiveParserASTNode overrides it.
+			-->
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr-runtime</artifactId>
+				<version>3.5.2</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-common</artifactId>

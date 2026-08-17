@@ -46,6 +46,7 @@ import org.apache.hadoop.hive.ql.metadata.Hive;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.metadata.Partition;
 import org.apache.hadoop.hive.ql.metadata.Table;
+import org.apache.hadoop.hive.ql.parse.ASTErrorUtils;
 import org.apache.hadoop.hive.ql.parse.EximUtil;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.mapred.InputFormat;
@@ -111,7 +112,9 @@ public class HiveParserLoadSemanticAnalyzer {
             String fromPath = stripQuotes(fromTree.getText());
             fromURI = initializeFromURI(fromPath, isLocal);
         } catch (IOException | URISyntaxException e) {
-            throw new SemanticException(ErrorMsg.INVALID_PATH.getMsg(fromTree, e.getMessage()), e);
+            throw new SemanticException(
+                    ASTErrorUtils.getMsg(ErrorMsg.INVALID_PATH.getMsg(), fromTree, e.getMessage()),
+                    e);
         }
 
         // initialize destination table/partition
@@ -197,7 +200,8 @@ public class HiveParserLoadSemanticAnalyzer {
         // we can change this going forward
         if (isLocal && !fromURI.getScheme().equals("file")) {
             throw new SemanticException(
-                    ErrorMsg.ILLEGAL_PATH.getMsg(
+                    ASTErrorUtils.getMsg(
+                            ErrorMsg.ILLEGAL_PATH.getMsg(),
                             ast,
                             "Source file system should be \"file\" if \"local\" is specified"));
         }
@@ -213,7 +217,8 @@ public class HiveParserLoadSemanticAnalyzer {
             for (FileStatus oneSrc : srcs) {
                 if (oneSrc.isDir()) {
                     throw new SemanticException(
-                            ErrorMsg.INVALID_PATH.getMsg(
+                            ASTErrorUtils.getMsg(
+                                    ErrorMsg.INVALID_PATH.getMsg(),
                                     ast,
                                     "source contains directory: " + oneSrc.getPath().toString()));
                 }

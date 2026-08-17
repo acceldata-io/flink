@@ -222,7 +222,8 @@ public class ScriptProcessBuilder {
                 String value = conf.get(name); // does variable expansion
                 name = safeEnvVarName(name);
                 boolean truncate =
-                        conf.getBoolean(HiveConf.ConfVars.HIVE_SCRIPT_TRUNCATE_ENV.toString(), false);
+                        conf.getBoolean(
+                                HiveConf.ConfVars.HIVE_SCRIPT_TRUNCATE_ENV.toString(), false);
                 value = safeEnvVarValue(value, name, truncate);
                 env.put(name, value);
             }

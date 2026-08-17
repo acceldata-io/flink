@@ -75,8 +75,8 @@ import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.util.ImmutableBitSet;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.ql.ErrorMsg;
@@ -725,7 +725,8 @@ public class HiveParserBaseSemanticAnalyzer {
 
         HiveParserTypeCheckCtx typeCheckCtx =
                 new HiveParserTypeCheckCtx(null, frameworkConfig, cluster);
-        String defaultPartitionName = HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_PARTITION_NAME);
+        String defaultPartitionName =
+                HiveConf.getVar(conf, HiveConf.ConfVars.DEFAULT_PARTITION_NAME);
         boolean result = true;
         for (Node childNode : astNode.getChildren()) {
             HiveParserASTNode childASTNode = (HiveParserASTNode) childNode;
@@ -1751,7 +1752,11 @@ public class HiveParserBaseSemanticAnalyzer {
                             HiveParserUtils.getWritableObjectInspector(aggParameters);
                     genericUDAFEvaluator =
                             FunctionRegistry.getGenericWindowingEvaluator(
-                                    aggName, originalParameterTypeInfos, isDistinct, isAllColumns);
+                                    aggName,
+                                    originalParameterTypeInfos,
+                                    isDistinct,
+                                    isAllColumns,
+                                    true);
                     HiveParserBaseSemanticAnalyzer.GenericUDAFInfo udaf =
                             HiveParserUtils.getGenericUDAFInfo(
                                     genericUDAFEvaluator, amode, aggParameters);

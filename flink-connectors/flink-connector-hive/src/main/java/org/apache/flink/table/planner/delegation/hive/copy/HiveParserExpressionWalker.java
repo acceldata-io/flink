@@ -20,14 +20,14 @@ package org.apache.flink.table.planner.delegation.hive.copy;
 
 import org.apache.flink.table.planner.delegation.hive.parse.HiveASTParser;
 
-import org.apache.hadoop.hive.ql.lib.Dispatcher;
 import org.apache.hadoop.hive.ql.lib.Node;
+import org.apache.hadoop.hive.ql.lib.SemanticDispatcher;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 
 /** Counterpart of hive's org.apache.hadoop.hive.ql.lib.ExpressionWalker. */
 public class HiveParserExpressionWalker extends HiveParserDefaultGraphWalker {
 
-    public HiveParserExpressionWalker(Dispatcher disp) {
+    public HiveParserExpressionWalker(SemanticDispatcher disp) {
         super(disp);
     }
 

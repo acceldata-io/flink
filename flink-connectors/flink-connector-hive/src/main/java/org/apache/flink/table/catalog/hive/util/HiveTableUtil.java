@@ -430,7 +430,8 @@ public class HiveTableUtil {
     }
 
     public static void setDefaultStorageFormat(StorageDescriptor sd, HiveConf hiveConf) {
-        sd.getSerdeInfo().setSerializationLib(hiveConf.getVar(HiveConf.ConfVars.HIVE_DEFAULT_SERDE));
+        sd.getSerdeInfo()
+                .setSerializationLib(hiveConf.getVar(HiveConf.ConfVars.HIVE_DEFAULT_SERDE));
         setStorageFormat(sd, hiveConf.getVar(HiveConf.ConfVars.HIVE_DEFAULT_FILEFORMAT), hiveConf);
     }
 

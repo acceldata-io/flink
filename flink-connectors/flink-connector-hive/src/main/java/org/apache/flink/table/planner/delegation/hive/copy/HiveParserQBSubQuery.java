@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hive.ql.ErrorMsg;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
 import org.apache.hadoop.hive.ql.lib.Node;
-import org.apache.hadoop.hive.ql.lib.NodeProcessor;
+import org.apache.hadoop.hive.ql.lib.SemanticNodeProcessor;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeConstantDesc;
@@ -236,7 +236,7 @@ public class HiveParserQBSubQuery {
         private final HiveParserRowResolver parentQueryRR;
         boolean forHavingClause;
         String parentQueryNewAlias;
-        NodeProcessor defaultExprProcessor;
+        SemanticNodeProcessor defaultExprProcessor;
         Stack<Node> stack;
         private final FrameworkConfig frameworkConfig;
         private final RelOptCluster cluster;
@@ -272,8 +272,7 @@ public class HiveParserQBSubQuery {
                 try {
                     cInfo = parentQueryRR.getExpression(expr);
                     if (cInfo != null) {
-                        return Pair.of(
-                                HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
+                        return Pair.of(HiveParserQBSubQuery.ExprType.REFERS_PARENT, cInfo);
                     }
                 } catch (SemanticException se) {
                 }
@@ -317,8 +316,7 @@ public class HiveParserQBSubQuery {
                 HiveParserASTNode left = (HiveParserASTNode) conjunct.getChild(0);
                 HiveParserASTNode right = (HiveParserASTNode) conjunct.getChild(1);
                 Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> leftInfo = analyzeExpr(left);
-                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> rightInfo =
-                        analyzeExpr(right);
+                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> rightInfo = analyzeExpr(right);
 
                 return new HiveParserQBSubQuery.Conjunct(
                         left,
@@ -328,8 +326,7 @@ public class HiveParserQBSubQuery {
                         leftInfo.getRight(),
                         rightInfo.getRight());
             } else {
-                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> sqExprInfo =
-                        analyzeExpr(conjunct);
+                Pair<HiveParserQBSubQuery.ExprType, ColumnInfo> sqExprInfo = analyzeExpr(conjunct);
                 return new HiveParserQBSubQuery.Conjunct(
                         conjunct,
                         null,
