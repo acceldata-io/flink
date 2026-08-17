@@ -794,6 +794,7 @@ public class HiveServer2Endpoint implements TCLIService.Iface, SqlGatewayEndpoin
     public TSetClientInfoResp SetClientInfo(TSetClientInfoReq tSetClientInfoReq) throws TException {
         return new TSetClientInfoResp(buildErrorStatus("SetClientInfo"));
     }
+
     // CHECKSTYLE.ON: MethodName
 
     @Override

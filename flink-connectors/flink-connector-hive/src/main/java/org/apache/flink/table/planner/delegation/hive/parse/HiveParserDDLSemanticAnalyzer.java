@@ -1998,10 +1998,7 @@ public class HiveParserDDLSemanticAnalyzer {
                 tableChanges,
                 new ResolvedCatalogTable(
                         CatalogTable.newBuilder()
-                                .schema(
-                                        Schema.newBuilder()
-                                                .fromResolvedSchema(newSchema)
-                                                .build())
+                                .schema(Schema.newBuilder().fromResolvedSchema(newSchema).build())
                                 .comment(oldTable.getComment())
                                 .partitionKeys(oldTable.getPartitionKeys())
                                 .options(props)
@@ -2073,10 +2070,7 @@ public class HiveParserDDLSemanticAnalyzer {
                 tableIdentifier,
                 new ResolvedCatalogTable(
                         CatalogTable.newBuilder()
-                                .schema(
-                                        Schema.newBuilder()
-                                                .fromResolvedSchema(newSchema)
-                                                .build())
+                                .schema(Schema.newBuilder().fromResolvedSchema(newSchema).build())
                                 .comment(oldTable.getComment())
                                 .partitionKeys(oldTable.getPartitionKeys())
                                 .options(props)
