@@ -51,7 +51,9 @@ import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_HISTORY_FILE_LO
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_IN_TEST;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.LOCAL_SCRATCH_DIR;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_CONNECT_URL_KEY;
+import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_URIS;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_WAREHOUSE;
+import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.SCRATCH_DIR;
 
 /**
  * Hive runner that uses local standalone HMS instead of embedded. Currently no test requires a
@@ -97,7 +99,7 @@ public class FlinkStandaloneHiveRunner extends FlinkEmbeddedHiveRunner {
     /** Launches HMS process and returns a Future representing that process. */
     private static Future<Void> startHMS(HiveServerContext context, int port) throws Exception {
         context.init();
-        context.getHiveConf().setVar(METASTOREURIS, "thrift://localhost:" + port);
+        context.getHiveConf().setVar(METASTORE_URIS, "thrift://localhost:" + port);
         HiveConf outsideConf = context.getHiveConf();
         List<String> args = new ArrayList<>();
         String javaHome = System.getProperty("java.home");
@@ -110,7 +112,7 @@ public class FlinkStandaloneHiveRunner extends FlinkEmbeddedHiveRunner {
         args.add(
                 hiveCmdLineConfig(
                         METASTORE_WAREHOUSE.varname, outsideConf.getVar(METASTORE_WAREHOUSE)));
-        args.add(hiveCmdLineConfig(SCRATCHDIR.varname, outsideConf.getVar(SCRATCHDIR)));
+        args.add(hiveCmdLineConfig(SCRATCH_DIR.varname, outsideConf.getVar(SCRATCH_DIR)));
         args.add(
                 hiveCmdLineConfig(
                         LOCAL_SCRATCH_DIR.varname, outsideConf.getVar(LOCAL_SCRATCH_DIR)));

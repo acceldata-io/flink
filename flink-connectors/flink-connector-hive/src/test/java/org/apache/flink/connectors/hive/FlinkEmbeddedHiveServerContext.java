@@ -51,6 +51,7 @@ import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_VALIDATE_C
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_VALIDATE_CONSTRAINTS;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_VALIDATE_TABLES;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_WAREHOUSE;
+import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.SCRATCH_DIR;
 
 /** HiveServerContext used by FlinkEmbeddedHiveRunner. */
 public class FlinkEmbeddedHiveServerContext implements HiveServerContext {
@@ -198,7 +199,7 @@ public class FlinkEmbeddedHiveServerContext implements HiveServerContext {
     private void configureFileSystem() {
 
         createAndSetFolderProperty(METASTORE_WAREHOUSE, "warehouse", hiveConf, basedir);
-        createAndSetFolderProperty(SCRATCHDIR, "scratchdir", hiveConf, basedir);
+        createAndSetFolderProperty(SCRATCH_DIR, "scratchdir", hiveConf, basedir);
         createAndSetFolderProperty(LOCAL_SCRATCH_DIR, "localscratchdir", hiveConf, basedir);
         createAndSetFolderProperty(HIVE_HISTORY_FILE_LOC, "tmp", hiveConf, basedir);
 
