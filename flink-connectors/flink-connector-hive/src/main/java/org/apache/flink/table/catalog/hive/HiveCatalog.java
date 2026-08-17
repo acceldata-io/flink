@@ -209,7 +209,7 @@ public class HiveCatalog extends AbstractCatalog {
             checkArgument(
                     !isEmbeddedMetastore(this.hiveConf),
                     "Embedded metastore is not allowed. Make sure you have set a valid value for "
-                            + HiveConf.ConfVars.METASTOREURIS.toString());
+                            + HiveConf.ConfVars.METASTORE_URIS.toString());
         }
         checkArgument(!isNullOrWhitespaceOnly(hiveVersion), "hiveVersion cannot be null or empty");
         this.hiveVersion = hiveVersion;
@@ -905,7 +905,7 @@ public class HiveCatalog extends AbstractCatalog {
                                             getHiveConf()
                                                     .getVar(
                                                             HiveConf.ConfVars
-                                                                    .DEFAULTPARTITIONNAME)))
+                                                                    .DEFAULT_PARTITION_NAME)))
                     .collect(Collectors.toList());
         } catch (TException e) {
             throw new CatalogException(
@@ -950,7 +950,7 @@ public class HiveCatalog extends AbstractCatalog {
                                             getHiveConf()
                                                     .getVar(
                                                             HiveConf.ConfVars
-                                                                    .DEFAULTPARTITIONNAME)))
+                                                                    .DEFAULT_PARTITION_NAME)))
                     .collect(Collectors.toList());
         } catch (TException e) {
             throw new CatalogException(
@@ -1169,7 +1169,7 @@ public class HiveCatalog extends AbstractCatalog {
             } else {
                 String value = spec.get(key);
                 if (value == null) {
-                    value = getHiveConf().getVar(HiveConf.ConfVars.DEFAULTPARTITIONNAME);
+                    value = getHiveConf().getVar(HiveConf.ConfVars.DEFAULT_PARTITION_NAME);
                 }
                 values.add(value);
             }
@@ -1592,7 +1592,7 @@ public class HiveCatalog extends AbstractCatalog {
         List<String> partitionCols = getFieldNames(hiveTable.getPartitionKeys());
         List<String> partitionVals =
                 getOrderedFullPartitionValues(partitionSpec, partitionCols, tablePath);
-        String defaultPartName = getHiveConf().getVar(HiveConf.ConfVars.DEFAULTPARTITIONNAME);
+        String defaultPartName = getHiveConf().getVar(HiveConf.ConfVars.DEFAULT_PARTITION_NAME);
         return FileUtils.makePartName(partitionCols, partitionVals, defaultPartName);
     }
 
@@ -1688,7 +1688,7 @@ public class HiveCatalog extends AbstractCatalog {
                     FileUtils.makePartName(
                             getFieldNames(hiveTable.getPartitionKeys()),
                             partition.getValues(),
-                            getHiveConf().getVar(HiveConf.ConfVars.DEFAULTPARTITIONNAME)),
+                            getHiveConf().getVar(HiveConf.ConfVars.DEFAULT_PARTITION_NAME)),
                     partition);
         }
         List<Partition> orderedPartitions = new ArrayList<>(partitions.size());
@@ -1776,7 +1776,7 @@ public class HiveCatalog extends AbstractCatalog {
                                 hiveTable,
                                 partitionName,
                                 hiveTable.getPartitionKeys(),
-                                getHiveConf().getVar(HiveConf.ConfVars.DEFAULTPARTITIONNAME));
+                                getHiveConf().getVar(HiveConf.ConfVars.DEFAULT_PARTITION_NAME));
 
                 // get statistic for non-partition columns
                 Map<String, CatalogColumnStatisticsDataBase> nonPartitionColumnStatistics =
@@ -1942,7 +1942,7 @@ public class HiveCatalog extends AbstractCatalog {
 
     @Internal
     public static boolean isEmbeddedMetastore(HiveConf hiveConf) {
-        return isNullOrWhitespaceOnly(hiveConf.getVar(HiveConf.ConfVars.METASTOREURIS));
+        return isNullOrWhitespaceOnly(hiveConf.getVar(HiveConf.ConfVars.METASTORE_URIS));
     }
 
     private static Database alterDatabase(Database hiveDB, CatalogDatabase newDatabase) {

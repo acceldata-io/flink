@@ -54,6 +54,13 @@ public class HiveShowTableUtils {
     // so we port the value to here
     private static final String DEFAULT_SERIALIZATION_FORMAT = "1";
 
+    // Sort column order flags.
+    // In Hive2/Hive3, these are
+    // org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer.HIVE_COLUMN_ORDER_{ASC,DESC}.
+    // Hive4 removed them, so we port the values to here.
+    private static final int HIVE_COLUMN_ORDER_ASC = 1;
+    private static final int HIVE_COLUMN_ORDER_DESC = 0;
+
     /** Construct the string for SHOW CREATE TABLE statement. Most of the logic is from Hive's. */
     public static String showCreateTable(ObjectPath tablePath, Table tbl) {
         boolean needsLocation;
@@ -149,10 +156,9 @@ public class HiveShowTableUtils {
                     List<String> sortKeys = new ArrayList<String>();
                     for (Order sortCol : sortCols) {
                         String sortKeyDesc = "  " + sortCol.getCol() + " ";
-                        if (sortCol.getOrder() == BaseSemanticAnalyzer.HIVE_COLUMN_ORDER_ASC) {
+                        if (sortCol.getOrder() == HIVE_COLUMN_ORDER_ASC) {
                             sortKeyDesc = sortKeyDesc + "ASC";
-                        } else if (sortCol.getOrder()
-                                == BaseSemanticAnalyzer.HIVE_COLUMN_ORDER_DESC) {
+                        } else if (sortCol.getOrder() == HIVE_COLUMN_ORDER_DESC) {
                             sortKeyDesc = sortKeyDesc + "DESC";
                         }
                         sortKeys.add(sortKeyDesc);

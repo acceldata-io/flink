@@ -107,7 +107,7 @@ import org.apache.calcite.util.CompositeList;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
-import org.apache.hadoop.hive.common.ObjectPair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.ql.ErrorMsg;
@@ -950,7 +950,7 @@ public class HiveParserCalcitePlanner {
 
             HiveParserASTNode subQueryAST = subQueries.get(i);
             // HiveParserSubQueryUtils.rewriteParentQueryWhere(clonedSearchCond, subQueryAST);
-            ObjectPair<Boolean, Integer> subqInfo = new ObjectPair<>(false, 0);
+            MutablePair<Boolean, Integer> subqInfo = new MutablePair<>(false, 0);
             if (!topLevelConjunctCheck(clonedSearchCond, subqInfo)) {
                 // Restriction.7.h :: SubQuery predicates can appear only as top level conjuncts.
                 throw new SemanticException(
@@ -1262,7 +1262,7 @@ public class HiveParserCalcitePlanner {
                         || !qbp.getDestCubes().isEmpty();
 
         // 2. Sanity check
-        if (semanticAnalyzer.getConf().getBoolVar(HiveConf.ConfVars.HIVEGROUPBYSKEW)
+        if (semanticAnalyzer.getConf().getBoolVar(HiveConf.ConfVars.HIVE_GROUPBY_SKEW)
                 && qbp.getDistinctFuncExprsForClause(detsClauseName).size() > 1) {
             throw new SemanticException(ErrorMsg.UNSUPPORTED_MULTIPLE_DISTINCTS.getMsg());
         }
@@ -1611,7 +1611,7 @@ public class HiveParserCalcitePlanner {
             Integer limit = qb.getParseInfo().getDestLimit(dest);
             if (limit == null) {
                 String mapRedMode =
-                        semanticAnalyzer.getConf().getVar(HiveConf.ConfVars.HIVEMAPREDMODE);
+                        semanticAnalyzer.getConf().getVar(HiveConf.ConfVars.HIVE_MAPRED_MODE);
                 boolean banLargeQuery =
                         Boolean.parseBoolean(
                                 semanticAnalyzer

@@ -80,7 +80,7 @@ import org.apache.hadoop.hive.ql.parse.PTFInvocationSpec.PTFQueryInputType;
 import org.apache.hadoop.hive.ql.parse.PrunedPartitionList;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.parse.SplitSample;
-import org.apache.hadoop.hive.ql.plan.CreateViewDesc;
+import org.apache.hadoop.hive.ql.ddl.view.create.CreateViewDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeColumnDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.plan.ExprNodeDescUtils;
@@ -540,7 +540,7 @@ public class HiveParserSemanticAnalyzer {
                                     (HiveParserASTNode) numerator,
                                     "Sampling percentage should be between 0 and 100"));
                 }
-                int seedNum = conf.getIntVar(ConfVars.HIVESAMPLERANDOMNUM);
+                int seedNum = conf.getIntVar(ConfVars.HIVE_SAMPLE_RANDOM_NUM);
                 sample = new SplitSample(percent, seedNum);
             } else if (type.getType() == HiveASTParser.TOK_ROWCOUNT) {
                 sample = new SplitSample(Integer.parseInt(value));
@@ -555,7 +555,7 @@ public class HiveParserSemanticAnalyzer {
                 } else if (last == 'g' || last == 'G') {
                     length <<= 30;
                 }
-                int seedNum = conf.getIntVar(ConfVars.HIVESAMPLERANDOMNUM);
+                int seedNum = conf.getIntVar(ConfVars.HIVE_SAMPLE_RANDOM_NUM);
                 sample = new SplitSample(length, seedNum);
             }
             String aliasId = getAliasId(alias, qb);
@@ -1124,8 +1124,8 @@ public class HiveParserSemanticAnalyzer {
                     qb.getParseInfo().setNoScanAnalyzeCommand(this.noscan);
                     qb.getParseInfo().setPartialScanAnalyzeCommand(this.partialscan);
                     // Allow analyze the whole table and dynamic partitions
-                    HiveConf.setVar(conf, HiveConf.ConfVars.DYNAMICPARTITIONINGMODE, "nonstrict");
-                    HiveConf.setVar(conf, HiveConf.ConfVars.HIVEMAPREDMODE, "nonstrict");
+                    HiveConf.setVar(conf, HiveConf.ConfVars.DYNAMIC_PARTITIONING_MODE, "nonstrict");
+                    HiveConf.setVar(conf, HiveConf.ConfVars.HIVE_MAPRED_MODE, "nonstrict");
 
                     break;
 

@@ -19,7 +19,7 @@
 package org.apache.flink.table.planner.delegation.hive.copy;
 
 /**
- * Counterpart of hive's org.apache.hadoop.hive.ql.plan.CreateTableDesc, but only contains the
+ * Counterpart of hive's org.apache.hadoop.hive.ql.ddl.table.create.CreateTableDesc, but only contains the
  * properties needed for "insert overwrite directory".
  */
 public class HiveParserDirectoryDesc {

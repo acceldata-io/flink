@@ -70,7 +70,7 @@ public class HiveParserQueryState {
             conf = new HiveConf();
         }
 
-        conf.setVar(HiveConf.ConfVars.HIVEQUERYID, QueryPlan.makeQueryId());
+        conf.setVar(HiveConf.ConfVars.HIVE_QUERY_ID, QueryPlan.makeQueryId());
         return conf;
     }
 
