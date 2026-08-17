@@ -167,11 +167,15 @@ public class HiveCatalogITCase {
 
         CatalogTable source =
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(resolvedSchema).build(),
-                                "Comment.",
-                                new ArrayList<>(),
-                                sourceOptions),
+                        CatalogTable.newBuilder()
+                                .schema(
+                                        Schema.newBuilder()
+                                                .fromResolvedSchema(resolvedSchema)
+                                                .build())
+                                .comment("Comment.")
+                                .partitionKeys(new ArrayList<>())
+                                .options(sourceOptions)
+                                .build(),
                         resolvedSchema);
 
         Path p = Paths.get(tempFolder.newFolder().getAbsolutePath(), "test.csv");
@@ -183,11 +187,15 @@ public class HiveCatalogITCase {
 
         CatalogTable sink =
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(resolvedSchema).build(),
-                                "Comment.",
-                                new ArrayList<>(),
-                                sinkOptions),
+                        CatalogTable.newBuilder()
+                                .schema(
+                                        Schema.newBuilder()
+                                                .fromResolvedSchema(resolvedSchema)
+                                                .build())
+                                .comment("Comment.")
+                                .partitionKeys(new ArrayList<>())
+                                .options(sinkOptions)
+                                .build(),
                         resolvedSchema);
 
         hiveCatalog.createTable(

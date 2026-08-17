@@ -89,11 +89,12 @@ public class HiveCatalogTest {
                 HiveTableUtil.instantiateHiveTable(
                         new ObjectPath("test", "test"),
                         new ResolvedCatalogTable(
-                                CatalogTable.of(
-                                        schema,
-                                        null,
-                                        new ArrayList<>(),
-                                        getLegacyFileSystemConnectorOptions("/test_path")),
+                                CatalogTable.newBuilder()
+                                        .schema(schema)
+                                        .comment(null)
+                                        .partitionKeys(new ArrayList<>())
+                                        .options(getLegacyFileSystemConnectorOptions("/test_path"))
+                                        .build(),
                                 resolvedSchema),
                         HiveTestUtils.createHiveConf());
 
@@ -112,7 +113,12 @@ public class HiveCatalogTest {
                 HiveTableUtil.instantiateHiveTable(
                         new ObjectPath("test", "test"),
                         new ResolvedCatalogTable(
-                                CatalogTable.of(schema, null, new ArrayList<>(), options),
+                                CatalogTable.newBuilder()
+                                        .schema(schema)
+                                        .comment(null)
+                                        .partitionKeys(new ArrayList<>())
+                                        .options(options)
+                                        .build(),
                                 resolvedSchema),
                         HiveTestUtils.createHiveConf());
 
@@ -135,7 +141,13 @@ public class HiveCatalogTest {
         hiveCatalog.createTable(
                 hiveObjectPath,
                 new ResolvedCatalogTable(
-                        CatalogTable.of(schema, null, new ArrayList<>(), options), resolvedSchema),
+                        CatalogTable.newBuilder()
+                                .schema(schema)
+                                .comment(null)
+                                .partitionKeys(new ArrayList<>())
+                                .options(options)
+                                .build(),
+                        resolvedSchema),
                 false);
 
         CatalogBaseTable hiveTable = hiveCatalog.getTable(hiveObjectPath);
@@ -172,8 +184,12 @@ public class HiveCatalogTest {
         hiveCatalog.createTable(
                 hiveObjectPath,
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().build(), null, new ArrayList<>(), properties),
+                        CatalogTable.newBuilder()
+                                .schema(Schema.newBuilder().build())
+                                .comment(null)
+                                .partitionKeys(new ArrayList<>())
+                                .options(properties)
+                                .build(),
                         ResolvedSchema.of()),
                 false);
 
