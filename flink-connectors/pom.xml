@@ -65,23 +65,6 @@ under the License.
 		</dependency>
 	</dependencies>
 
-	<!-- See main pom.xml for explanation of profiles -->
-	<profiles>
-
-		<!-- Create SQL Client uber jars by default -->
-		<profile>
-			<id>sql-jars</id>
-			<activation>
-				<property>
-					<name>!skipSqlJars</name>
-				</property>
-			</activation>
-			<modules>
-				<module>flink-sql-connector-hive-3.1.4</module>
-			</modules>
-		</profile>
-	</profiles>
-
 	<build>
 		<plugins>
 			<plugin>
