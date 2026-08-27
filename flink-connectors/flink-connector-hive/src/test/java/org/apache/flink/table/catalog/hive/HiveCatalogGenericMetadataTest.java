@@ -82,8 +82,11 @@ class HiveCatalogGenericMetadataTest extends HiveCatalogMetadataTestBase {
         final Schema schema = Schema.newBuilder().fromResolvedSchema(resolvedSchema).build();
 
         final CatalogTable origin =
-                CatalogTable.of(
-                        schema, TEST_COMMENT, Collections.emptyList(), getBatchTableProperties());
+                CatalogTable.newBuilder()
+                        .schema(schema)
+                        .comment(TEST_COMMENT)
+                        .options(getBatchTableProperties())
+                        .build();
 
         ObjectPath tablePath = new ObjectPath(db1, "generic_table");
         try {
@@ -381,11 +384,13 @@ class HiveCatalogGenericMetadataTest extends HiveCatalogMetadataTestBase {
                         null);
         CatalogTable catalogTable =
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(resolvedSchema).build(),
-                                null,
-                                new ArrayList<>(),
-                                Collections.emptyMap()),
+                        CatalogTable.newBuilder()
+                                .schema(
+                                        Schema.newBuilder()
+                                                .fromResolvedSchema(resolvedSchema)
+                                                .build())
+                                .options(Collections.emptyMap())
+                                .build(),
                         resolvedSchema);
         catalog.createTable(path1, catalogTable, false);
         CatalogTable retrievedTable = (CatalogTable) catalog.getTable(path1);
@@ -524,6 +529,11 @@ class HiveCatalogGenericMetadataTest extends HiveCatalogMetadataTestBase {
     @Override
     public CatalogPartition createPartition() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected boolean supportsModels() {
+        return false;
     }
 
     @Override

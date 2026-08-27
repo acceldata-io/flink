@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HADOOP_BIN;
-import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVESTATSAUTOGATHER;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_AUTHORIZATION_MANAGER;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_CBO_ENABLED;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_CONVERT_JOIN;
@@ -44,6 +43,7 @@ import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_METADATA_ONLY_Q
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_OPT_INDEX_FILTER;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_SERVER2_LOGGING_OPERATION_ENABLED;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_SKEW_JOIN;
+import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_STATS_AUTOGATHER;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.HIVE_SUPPORT_CONCURRENCY;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.LOCAL_SCRATCH_DIR;
 import static org.apache.hadoop.hive.conf.HiveConf.ConfVars.METASTORE_CONNECT_URL_KEY;
@@ -106,7 +106,7 @@ public class FlinkEmbeddedHiveServerContext implements HiveServerContext {
     }
 
     private void configureMiscHiveSettings() {
-        hiveConf.setBoolVar(HIVESTATSAUTOGATHER, false);
+        hiveConf.setBoolVar(HIVE_STATS_AUTOGATHER, false);
 
         // Turn off CBO so we don't depend on calcite
         hiveConf.setBoolVar(HIVE_CBO_ENABLED, false);

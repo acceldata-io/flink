@@ -21,7 +21,7 @@ package org.apache.flink.table.catalog.hive;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.sink.legacy.SinkFunction;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Schema;
@@ -110,11 +110,11 @@ public class HiveCatalogUdfITCase extends AbstractTestBase {
         sourceOptions.put("format.type", "csv");
 
         CatalogTable unresolved =
-                CatalogTable.of(
-                        Schema.newBuilder().fromResolvedSchema(schema).build(),
-                        "Comment.",
-                        new ArrayList<>(),
-                        sourceOptions);
+                CatalogTable.newBuilder()
+                        .schema(Schema.newBuilder().fromResolvedSchema(schema).build())
+                        .options(sourceOptions)
+                        .comment("Comment.")
+                        .build();
         ResolvedCatalogTable source = new ResolvedCatalogTable(unresolved, schema);
 
         hiveCatalog.createTable(
@@ -188,11 +188,11 @@ public class HiveCatalogUdfITCase extends AbstractTestBase {
             sinkOptions.put("format.type", "csv");
 
             CatalogTable unresolved =
-                    CatalogTable.of(
-                            Schema.newBuilder().fromResolvedSchema(sinkSchema).build(),
-                            "Comment.",
-                            new ArrayList<>(),
-                            sinkOptions);
+                    CatalogTable.newBuilder()
+                            .schema(Schema.newBuilder().fromResolvedSchema(sinkSchema).build())
+                            .options(sinkOptions)
+                            .comment("Comment.")
+                            .build();
             final ResolvedCatalogTable sink = new ResolvedCatalogTable(unresolved, sinkSchema);
 
             hiveCatalog.createTable(
