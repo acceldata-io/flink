@@ -1404,7 +1404,7 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     public DataConnector getDataConnector(String name)
             throws MetaException, TException {
         GetDataConnectorRequest request = new GetDataConnectorRequest(name);
-        return client.get_dataconnector_req(request);
+        return client.get_dataconnector(request);
     }
 
     /**

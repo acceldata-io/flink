@@ -1368,7 +1368,7 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     public void createDataConnector(DataConnector connector)
             throws AlreadyExistsException, InvalidObjectException, MetaException, TException {
         CreateDataConnectorRequest connectorReq = new CreateDataConnectorRequest(connector);
-        client.create_dataconnector_req(connectorReq);
+        client.create_dataconnector(connectorReq);
     }
 
     /**
@@ -1385,7 +1385,7 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
         DropDataConnectorRequest dropDcReq = new DropDataConnectorRequest(name);
         dropDcReq.setIfNotExists(ifNotExists);
         dropDcReq.setCheckReferences(checkReferences);
-        client.drop_dataconnector_req(dropDcReq);
+        client.drop_dataconnector(dropDcReq);
     }
 
     /**
@@ -1400,7 +1400,7 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     public void alterDataConnector(String name, DataConnector connector)
             throws NoSuchObjectException, MetaException, TException {
         AlterDataConnectorRequest alterReq = new AlterDataConnectorRequest(name, connector);
-        client.alter_dataconnector_req(alterReq);
+        client.alter_dataconnector(alterReq);
     }
 
     /**
@@ -1413,7 +1413,7 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     public DataConnector getDataConnector(String name)
             throws MetaException, TException {
         GetDataConnectorRequest request = new GetDataConnectorRequest(name);
-        return client.get_dataconnector_req(request);
+        return client.get_dataconnector(request);
     }
 
     /**
