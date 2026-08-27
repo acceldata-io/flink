@@ -1084,6 +1084,11 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
         client.drop_catalog(new DropCatalogRequest(catName));
     }
 
+    @Override
+    public void dropCatalog(String s, boolean b) throws TException {
+        client.drop_catalog(new DropCatalogRequest(s));
+    }
+
     /**
      * @param new_part
      * @return the added partition
@@ -1363,7 +1368,8 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     @Override
     public void createDataConnector(DataConnector connector)
             throws AlreadyExistsException, InvalidObjectException, MetaException, TException {
-        client.create_dataconnector(connector);
+        client.create_dataconnector_req(
+            new CreateDataConnectorRequest(connector));
     }
 
     /**
@@ -1377,7 +1383,12 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     @Override
     public void dropDataConnector(String name, boolean ifNotExists, boolean checkReferences)
             throws NoSuchObjectException, InvalidOperationException, MetaException, TException {
-        client.drop_dataconnector(name, ifNotExists, checkReferences);
+        DropDataConnectorRequest request = new DropDataConnectorRequest();
+        request.setConnectorName(name);
+        request.setIfNotExists(ifNotExists);
+        request.setCheckReferences(checkReferences);
+
+        client.drop_dataconnector_req(request);
     }
 
     /**
@@ -1391,7 +1402,10 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     @Override
     public void alterDataConnector(String name, DataConnector connector)
             throws NoSuchObjectException, MetaException, TException {
-        client.alter_dataconnector(name, connector);
+        AlterDataConnectorRequest request = new AlterDataConnectorRequest();
+        request.setConnectorName(name);
+        request.setNewConnector(connector);
+        client.alter_dataconnector_req(request);
     }
 
     /**
@@ -3551,6 +3565,12 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     }
 
     @Override
+    public boolean deleteColumnStatistics(
+        DeleteColumnStatisticsRequest deleteColumnStatisticsRequest) throws TException {
+        return false;
+    }
+
+    @Override
     public void updateTransactionalStatistics(UpdateTransactionalStatsRequest req)  throws TException {
         client.update_transaction_statistics(req);
     }
@@ -4432,6 +4452,12 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
         return client.get_latest_txnid_in_conflict(txnId);
     }
 
+    @Override
+    public GetDatabaseObjectsResponse get_databases_req(
+        GetDatabaseObjectsRequest getDatabaseObjectsRequest) throws TException {
+        return client.get_databases_req(getDatabaseObjectsRequest);
+    }
+
     @InterfaceAudience.LimitedPrivate({"HCatalog"})
     @Override
     public NotificationEventResponse getNextNotification(long lastEventId, int maxEvents,
@@ -4631,6 +4657,15 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
     @Override
     public List<String> getFunctions(String dbName, String pattern) throws TException {
         return getFunctions(getDefaultCatalog(conf), dbName, pattern);
+    }
+
+    @Override
+    public GetFunctionsResponse getFunctionsRequest(GetFunctionsRequest getFunctionsRequest)
+        throws TException {
+        if (!getFunctionsRequest.isSetCatalogName()) {
+            getFunctionsRequest.setCatalogName(getDefaultCatalog(conf));
+        }
+        return client.get_functions_req(getFunctionsRequest);
     }
 
     @Override
@@ -5090,8 +5125,12 @@ public class HiveMetaStoreClient implements IMetaStoreClient, AutoCloseable {
             return null;
         }
 
+        String validTxnWriteIdListRaw = conf.get(ValidTxnWriteIdList.VALID_TABLES_WRITEIDS_KEY);
+        if (validTxnWriteIdListRaw == null) {
+            return null;
+        }
         ValidTxnWriteIdList validTxnWriteIdList = new ValidTxnWriteIdList(
-                conf.get(ValidTxnWriteIdList.VALID_TABLES_WRITEIDS_KEY));
+            Long.parseLong(validTxnWriteIdListRaw));
         ValidWriteIdList writeIdList = validTxnWriteIdList.getTableValidWriteIdList(
                 TableName.getDbTable(dbName, tblName));
         return writeIdList!=null?writeIdList.toString():null;
