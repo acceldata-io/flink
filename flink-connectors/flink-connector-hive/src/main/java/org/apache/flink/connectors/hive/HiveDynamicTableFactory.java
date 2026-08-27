@@ -25,8 +25,6 @@ import org.apache.flink.connector.file.table.FileSystemConnectorOptions;
 import org.apache.flink.connectors.hive.util.JobConfUtils;
 import org.apache.flink.table.catalog.ResolvedCatalogTable;
 import org.apache.flink.table.catalog.hive.HiveCatalog;
-import org.apache.flink.table.catalog.hive.HiveCatalogLock;
-import org.apache.flink.table.connector.RequireCatalogLock;
 import org.apache.flink.table.connector.sink.DynamicTableSink;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.factories.DynamicTableSinkFactory;
@@ -79,13 +77,22 @@ public class HiveDynamicTableFactory implements DynamicTableSourceFactory, Dynam
                             null,
                             context.getObjectIdentifier(),
                             context.getCatalogTable(),
+                            context.getEnrichmentOptions(),
                             context.getConfiguration(),
                             context.getClassLoader(),
                             context.isTemporary());
-            if (sink instanceof RequireCatalogLock) {
-                ((RequireCatalogLock) sink).setLockFactory(HiveCatalogLock.createFactory(hiveConf));
-            }
-            return sink;
+            final Integer configuredSinkParallelism =
+                    Configuration.fromMap(context.getCatalogTable().getOptions())
+                            .get(FileSystemConnectorOptions.SINK_PARALLELISM);
+
+            final JobConf jobConf = JobConfUtils.createJobConfWithCredentials(hiveConf);
+
+            return new HiveTableSink(
+                    context.getConfiguration(),
+                    jobConf,
+                    context.getObjectIdentifier(),
+                    context.getCatalogTable(),
+                    configuredSinkParallelism);
         }
 
         final Integer configuredSinkParallelism =
@@ -109,19 +116,14 @@ public class HiveDynamicTableFactory implements DynamicTableSourceFactory, Dynam
 
         // we don't support temporary hive tables yet
         if (!isHiveTable || context.isTemporary()) {
-            DynamicTableSource source =
-                    FactoryUtil.createDynamicTableSource(
-                            null,
-                            context.getObjectIdentifier(),
-                            context.getCatalogTable(),
-                            context.getConfiguration(),
-                            context.getClassLoader(),
-                            context.isTemporary());
-            if (source instanceof RequireCatalogLock) {
-                ((RequireCatalogLock) source)
-                        .setLockFactory(HiveCatalogLock.createFactory(hiveConf));
-            }
-            return source;
+            return FactoryUtil.createDynamicTableSource(
+                    null,
+                    context.getObjectIdentifier(),
+                    context.getCatalogTable(),
+                    context.getEnrichmentOptions(),
+                    context.getConfiguration(),
+                    context.getClassLoader(),
+                    context.isTemporary());
         }
 
         final ResolvedCatalogTable catalogTable =

@@ -1066,11 +1066,15 @@ public class HiveParserDDLSemanticAnalyzer {
                                 cols, partCols, Collections.emptySet(), null);
                 ResolvedCatalogTable destTable =
                         new ResolvedCatalogTable(
-                                CatalogTable.of(
-                                        Schema.newBuilder().fromResolvedSchema(schema).build(),
-                                        comment,
-                                        HiveCatalog.getFieldNames(partCols),
-                                        tblProps),
+                                CatalogTable.newBuilder()
+                                        .schema(
+                                                Schema.newBuilder()
+                                                        .fromResolvedSchema(schema)
+                                                        .build())
+                                        .comment(comment)
+                                        .partitionKeys(HiveCatalog.getFieldNames(partCols))
+                                        .options(tblProps)
+                                        .build(),
                                 schema);
 
                 Tuple4<ObjectIdentifier, QueryOperation, Map<String, String>, Boolean>
@@ -1196,7 +1200,13 @@ public class HiveParserDDLSemanticAnalyzer {
         Schema schema = HiveTableUtil.createSchema(cols, partCols, notNullColSet, uniqueConstraint);
         return new CreateTableOperation(
                 identifier,
-                CatalogTable.of(schema, comment, HiveCatalog.getFieldNames(partCols), props),
+                (ResolvedCatalogTable)
+                        CatalogTable.newBuilder()
+                                .schema(schema)
+                                .comment(comment)
+                                .partitionKeys(HiveCatalog.getFieldNames(partCols))
+                                .options(props)
+                                .build(),
                 ifNotExists,
                 isTemporary);
     }
@@ -1805,7 +1815,7 @@ public class HiveParserDDLSemanticAnalyzer {
     }
 
     private Operation convertShowDatabases() {
-        return new ShowDatabasesOperation();
+        return new ShowDatabasesOperation(null); // TODO: provide catalog name
     }
 
     private Operation convertShowTables(HiveParserASTNode ast, boolean expectView) {
@@ -1844,7 +1854,9 @@ public class HiveParserDDLSemanticAnalyzer {
         if (pattern != null) {
             handleUnsupportedOperation("SHOW TABLES/VIEWS LIKE is not supported");
         }
-        return expectView ? new ShowViewsOperation() : new ShowTablesOperation();
+        return expectView
+                ? new ShowViewsOperation(null, null, null, null)
+                : new ShowTablesOperation(null, null, null, null);
     }
 
     /**
@@ -1858,7 +1870,8 @@ public class HiveParserDDLSemanticAnalyzer {
             assert (ast.getChild(0).getType() == HiveASTParser.KW_LIKE);
             throw new ValidationException("SHOW FUNCTIONS LIKE is not supported yet");
         }
-        return new ShowFunctionsOperation();
+        return new ShowFunctionsOperation(
+                ShowFunctionsOperation.FunctionScope.ALL, null, null, null, null);
     }
 
     private Operation convertAlterTableRename(
@@ -1980,11 +1993,12 @@ public class HiveParserDDLSemanticAnalyzer {
                 tableIdentifier,
                 tableChanges,
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(newSchema).build(),
-                                oldTable.getComment(),
-                                oldTable.getPartitionKeys(),
-                                props),
+                        CatalogTable.newBuilder()
+                                .schema(Schema.newBuilder().fromResolvedSchema(newSchema).build())
+                                .comment(oldTable.getComment())
+                                .partitionKeys(oldTable.getPartitionKeys())
+                                .options(props)
+                                .build(),
                         newSchema),
                 false);
     }
@@ -2051,11 +2065,12 @@ public class HiveParserDDLSemanticAnalyzer {
         return new AlterTableSchemaOperation(
                 tableIdentifier,
                 new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(newSchema).build(),
-                                oldTable.getComment(),
-                                oldTable.getPartitionKeys(),
-                                props),
+                        CatalogTable.newBuilder()
+                                .schema(Schema.newBuilder().fromResolvedSchema(newSchema).build())
+                                .comment(oldTable.getComment())
+                                .partitionKeys(oldTable.getPartitionKeys())
+                                .options(props)
+                                .build(),
                         newSchema),
                 false);
     }
@@ -2267,7 +2282,7 @@ public class HiveParserDDLSemanticAnalyzer {
         } else {
             retValue = tblProp;
         }
-        String paraString = HiveConf.getVar(conf, HiveConf.ConfVars.NEWTABLEDEFAULTPARA);
+        String paraString = HiveConf.getVar(conf, HiveConf.ConfVars.NEW_TABLE_DEFAULT_PARA);
         if (paraString != null && !paraString.isEmpty()) {
             for (String keyValuePair : paraString.split(",")) {
                 String[] keyValue = keyValuePair.split("=", 2);

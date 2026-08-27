@@ -62,6 +62,10 @@ public class HiveOutputFormatFactory implements OutputFormatFactory<Row> {
         public void configure(Configuration parameters) {}
 
         @Override
+        public void open(InitializationContext context) throws IOException {
+            // RecordWriter is already created by HiveWriterFactory.
+        }
+
         public void open(int taskNumber, int numTasks) {}
 
         @Override

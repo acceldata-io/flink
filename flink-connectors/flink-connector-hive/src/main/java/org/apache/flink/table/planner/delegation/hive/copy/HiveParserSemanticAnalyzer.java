@@ -663,11 +663,13 @@ public class HiveParserSemanticAnalyzer {
             ResolvedSchema resolvedSchema = ResolvedSchema.physical(fieldsName, fieldsDataType);
             ResolvedCatalogTable tempTable =
                     new ResolvedCatalogTable(
-                            CatalogTable.of(
-                                    Schema.newBuilder().fromResolvedSchema(resolvedSchema).build(),
-                                    "values temp table",
-                                    new ArrayList<>(),
-                                    Collections.emptyMap()),
+                            CatalogTable.newBuilder()
+                                    .schema(
+                                            Schema.newBuilder()
+                                                    .fromResolvedSchema(resolvedSchema)
+                                                    .build())
+                                    .comment("values temp table")
+                                    .build(),
                             resolvedSchema);
             // remember the data for this table
             qb.getValuesTableToData().put(tableName, Tuple2.of(tempTable, valuesData));
@@ -1643,7 +1645,7 @@ public class HiveParserSemanticAnalyzer {
                                             (CatalogTable) ts.table,
                                             ts.partHandle);
                         }
-                        if (HiveConf.getBoolVar(conf, HiveConf.ConfVars.HIVESTATSAUTOGATHER)) {
+                        if (HiveConf.getBoolVar(conf, HiveConf.ConfVars.HIVE_STATS_AUTOGATHER)) {
                             // Add the table spec for the destination table.
                             qb.getParseInfo()
                                     .addTableSpec(
@@ -1689,7 +1691,7 @@ public class HiveParserSemanticAnalyzer {
                                     }
                                 }
                                 if (HiveConf.getBoolVar(
-                                        conf, HiveConf.ConfVars.HIVESTATSAUTOGATHER)) {
+                                        conf, HiveConf.ConfVars.HIVE_STATS_AUTOGATHER)) {
                                     TableSpec ts =
                                             new TableSpec(
                                                     catalogRegistry,

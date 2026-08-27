@@ -22,7 +22,6 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
-import org.apache.flink.table.catalog.CatalogLock;
 import org.apache.flink.table.catalog.ObjectIdentifier;
 import org.apache.flink.table.catalog.hive.HiveCatalogLock;
 import org.apache.flink.table.connector.ChangelogMode;
@@ -66,7 +65,7 @@ public class TestLockTableSinkFactory implements DynamicTableSinkFactory {
 
         private final ObjectIdentifier tableIdentifier;
 
-        private CatalogLock.Factory lockFactory;
+        private HiveCatalogLock lockFactory;
 
         private TestLockTableSink(ObjectIdentifier tableIdentifier) {
             this.tableIdentifier = tableIdentifier;
@@ -107,7 +106,7 @@ public class TestLockTableSinkFactory implements DynamicTableSinkFactory {
         }
 
         @Override
-        public void setLockFactory(CatalogLock.Factory lockFactory) {
+        public void setLockFactory(HiveCatalogLock lockFactory) {
             this.lockFactory = lockFactory;
         }
     }
@@ -117,11 +116,11 @@ public class TestLockTableSinkFactory implements DynamicTableSinkFactory {
         private static final AtomicReference<TestLockSink> REFERENCE = new AtomicReference<>();
 
         private final ObjectIdentifier tableIdentifier;
-        private final CatalogLock.Factory lockFactory;
+        private final HiveCatalogLock lockFactory;
 
         private transient CatalogLock lock;
 
-        private TestLockSink(ObjectIdentifier tableIdentifier, CatalogLock.Factory lockFactory) {
+        private TestLockSink(ObjectIdentifier tableIdentifier, HiveCatalogLock lockFactory) {
             this.tableIdentifier = tableIdentifier;
             this.lockFactory = lockFactory;
         }

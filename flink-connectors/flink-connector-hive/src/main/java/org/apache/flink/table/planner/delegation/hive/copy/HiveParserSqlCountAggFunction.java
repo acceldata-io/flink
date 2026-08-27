@@ -18,6 +18,8 @@
 
 package org.apache.flink.table.planner.delegation.hive.copy;
 
+import org.apache.flink.shaded.guava33.com.google.common.collect.ImmutableList;
+
 import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
@@ -93,10 +95,13 @@ public class HiveParserSqlCountAggFunction extends SqlAggFunction
                     false,
                     false,
                     false,
+                    ImmutableList.of(),
                     ImmutableIntList.of(),
                     -1,
                     null,
                     RelCollations.EMPTY,
+                    0,
+                    null,
                     typeFactory.createTypeWithNullability(
                             typeFactory.createSqlType(SqlTypeName.BIGINT), true),
                     "count");

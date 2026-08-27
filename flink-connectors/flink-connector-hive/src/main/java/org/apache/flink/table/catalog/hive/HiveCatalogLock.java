@@ -21,7 +21,6 @@ package org.apache.flink.table.catalog.hive;
 import org.apache.flink.connectors.hive.JobConfWrapper;
 import org.apache.flink.connectors.hive.util.HiveConfUtils;
 import org.apache.flink.connectors.hive.util.JobConfUtils;
-import org.apache.flink.table.catalog.CatalogLock;
 import org.apache.flink.table.catalog.hive.client.HiveMetastoreClientFactory;
 import org.apache.flink.table.catalog.hive.client.HiveMetastoreClientWrapper;
 import org.apache.flink.table.catalog.hive.factories.HiveCatalogFactoryOptions;
@@ -47,12 +46,12 @@ import static org.apache.flink.table.catalog.hive.HiveConfOptions.LOCK_ACQUIRE_T
 import static org.apache.flink.table.catalog.hive.HiveConfOptions.LOCK_CHECK_MAX_SLEEP;
 
 /**
- * Hive {@link CatalogLock}.
+ * Hive.
  *
  * @deprecated This class will be removed soon. Please see FLIP-346 for more details.
  */
 @Deprecated
-public class HiveCatalogLock implements CatalogLock {
+public class HiveCatalogLock {
 
     private final HiveMetastoreClientWrapper client;
     private final long checkMaxSleep;
@@ -65,7 +64,6 @@ public class HiveCatalogLock implements CatalogLock {
         this.acquireTimeout = acquireTimeout;
     }
 
-    @Override
     public <T> T runWithLock(String database, String table, Callable<T> callable) throws Exception {
         long lockId = lock(database, table);
         try {
@@ -118,18 +116,17 @@ public class HiveCatalogLock implements CatalogLock {
         client.unlock(lockId);
     }
 
-    @Override
     public void close() {
         this.client.close();
     }
 
     /** Create a hive lock factory. */
-    public static CatalogLock.Factory createFactory(HiveConf hiveConf) {
+    public static HiveCatalogLockFactory createFactory(HiveConf hiveConf) {
         return new HiveCatalogLockFactory(hiveConf);
     }
 
     @Deprecated
-    private static class HiveCatalogLockFactory implements CatalogLock.Factory {
+    private static class HiveCatalogLockFactory {
 
         private static final long serialVersionUID = 1L;
 
@@ -140,8 +137,7 @@ public class HiveCatalogLock implements CatalogLock {
                     new JobConfWrapper(JobConfUtils.createJobConfWithCredentials(hiveConf));
         }
 
-        @Override
-        public CatalogLock create() {
+        public HiveCatalogLock create() {
             JobConf conf = confWrapper.conf();
             String version = conf.get(HiveCatalogFactoryOptions.HIVE_VERSION.key());
             long checkMaxSleep =

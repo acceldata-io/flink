@@ -18,50 +18,25 @@
 
 package org.apache.flink.connectors.hive;
 
+import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.table.catalog.CatalogTable;
 import org.apache.flink.table.catalog.hive.HiveCatalog;
-import org.apache.flink.table.factories.TableFactoryUtil;
-import org.apache.flink.table.factories.TableSinkFactory;
-import org.apache.flink.table.factories.TableSourceFactory;
-import org.apache.flink.table.sinks.TableSink;
-import org.apache.flink.table.sources.TableSource;
+import org.apache.flink.table.connector.sink.DynamicTableSink;
+import org.apache.flink.table.connector.source.DynamicTableSource;
+import org.apache.flink.table.factories.DynamicTableSinkFactory;
+import org.apache.flink.table.factories.DynamicTableSourceFactory;
+import org.apache.flink.table.factories.FactoryUtil;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
+import java.util.Set;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** A table factory implementation for Hive catalog. */
-public class HiveTableFactory implements TableSourceFactory, TableSinkFactory {
-
+public class HiveTableFactory implements DynamicTableSourceFactory, DynamicTableSinkFactory {
     @Override
-    public Map<String, String> requiredContext() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<String> supportedProperties() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public TableSource createTableSource(TableSourceFactory.Context context) {
-        CatalogTable table = checkNotNull(context.getTable());
-
-        boolean isHiveTable = HiveCatalog.isHiveTable(table.getOptions());
-
-        // we don't support temporary hive tables yet
-        if (isHiveTable && !context.isTemporary()) {
-            throw new UnsupportedOperationException(
-                    "Legacy TableSource for Hive is deprecated. Hive table source should be created by HiveDynamicTableFactory.");
-        } else {
-            return TableFactoryUtil.findAndCreateTableSource(context);
-        }
-    }
-
-    @Override
-    public TableSink createTableSink(TableSinkFactory.Context context) {
-        CatalogTable table = checkNotNull(context.getTable());
+    public DynamicTableSink createDynamicTableSink(Context context) {
+        CatalogTable table = checkNotNull(context.getCatalogTable());
 
         boolean isHiveTable = HiveCatalog.isHiveTable(table.getOptions());
 
@@ -70,7 +45,51 @@ public class HiveTableFactory implements TableSourceFactory, TableSinkFactory {
             throw new UnsupportedOperationException(
                     "Legacy TableSink for Hive is deprecated. Hive table sink should be created by HiveDynamicTableFactory.");
         } else {
-            return TableFactoryUtil.findAndCreateTableSink(context);
+            return FactoryUtil.createDynamicTableSink(
+                    null,
+                    context.getObjectIdentifier(),
+                    context.getCatalogTable(),
+                    context.getEnrichmentOptions(),
+                    context.getConfiguration(),
+                    context.getClassLoader(),
+                    context.isTemporary());
         }
+    }
+
+    @Override
+    public DynamicTableSource createDynamicTableSource(Context context) {
+        CatalogTable table = checkNotNull(context.getCatalogTable());
+
+        boolean isHiveTable = HiveCatalog.isHiveTable(table.getOptions());
+
+        // we don't support temporary hive tables yet
+        if (isHiveTable && !context.isTemporary()) {
+            throw new UnsupportedOperationException(
+                    "Legacy TableSource for Hive is deprecated. Hive table source should be created by HiveDynamicTableFactory.");
+        } else {
+            return FactoryUtil.createDynamicTableSource(
+                    null,
+                    context.getObjectIdentifier(),
+                    context.getCatalogTable(),
+                    context.getEnrichmentOptions(),
+                    context.getConfiguration(),
+                    context.getClassLoader(),
+                    context.isTemporary());
+        }
+    }
+
+    @Override
+    public String factoryIdentifier() {
+        return "hive";
+    }
+
+    @Override
+    public Set<ConfigOption<?>> requiredOptions() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Set<ConfigOption<?>> optionalOptions() {
+        return Collections.emptySet();
     }
 }

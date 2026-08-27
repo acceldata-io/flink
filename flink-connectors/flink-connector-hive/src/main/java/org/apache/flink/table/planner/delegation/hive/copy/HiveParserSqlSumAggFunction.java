@@ -18,6 +18,8 @@
 
 package org.apache.flink.table.planner.delegation.hive.copy;
 
+import org.apache.flink.shaded.guava33.com.google.common.collect.ImmutableList;
+
 import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.calcite.rel.type.RelDataType;
@@ -39,7 +41,6 @@ import org.apache.calcite.util.ImmutableIntList;
 import org.apache.calcite.util.Optionality;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -108,10 +109,13 @@ public class HiveParserSqlSumAggFunction extends SqlAggFunction
                     false,
                     false,
                     false,
+                    ImmutableList.of(),
                     ImmutableIntList.of(),
                     -1,
                     null,
                     RelCollations.EMPTY,
+                    0,
+                    null,
                     countRetType,
                     "count");
         }
@@ -157,10 +161,12 @@ public class HiveParserSqlSumAggFunction extends SqlAggFunction
                     false,
                     false,
                     false,
-                    Collections.singletonList(ordinal),
+                    ImmutableList.of(ordinal),
                     -1,
                     null,
                     RelCollations.EMPTY,
+                    0,
+                    null,
                     aggregateCall.type,
                     aggregateCall.name);
         }

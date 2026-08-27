@@ -1701,11 +1701,11 @@ public class HiveParserUtils {
                 aggFunction,
                 distinct,
                 approximate,
-                ignoreNulls,
                 argList,
                 filterArg,
-                null,
                 collation,
+                groupCount,
+                input,
                 type,
                 name);
     }
