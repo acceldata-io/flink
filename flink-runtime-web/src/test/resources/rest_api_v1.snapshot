@@ -2575,30 +2575,7 @@
     },
     "response" : {
       "type" : "object",
-      "id" : "urn:jsonschema:org:apache:flink:runtime:rest:messages:job:JobResourceRequirementsBody",
-      "properties" : {
-        "jobVertexResourceRequirements" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "object",
-            "id" : "urn:jsonschema:org:apache:flink:runtime:jobgraph:JobVertexResourceRequirements",
-            "properties" : {
-              "parallelism" : {
-                "type" : "object",
-                "id" : "urn:jsonschema:org:apache:flink:runtime:jobgraph:JobVertexResourceRequirements:Parallelism",
-                "properties" : {
-                  "lowerBound" : {
-                    "type" : "integer"
-                  },
-                  "upperBound" : {
-                    "type" : "integer"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      "id" : "urn:jsonschema:org:apache:flink:runtime:rest:messages:job:JobResourceRequirementsBody"
     }
   }, {
     "url" : "/jobs/:jobid/resource-requirements",
@@ -2615,30 +2592,7 @@
     },
     "request" : {
       "type" : "object",
-      "id" : "urn:jsonschema:org:apache:flink:runtime:rest:messages:job:JobResourceRequirementsBody",
-      "properties" : {
-        "jobVertexResourceRequirements" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "object",
-            "id" : "urn:jsonschema:org:apache:flink:runtime:jobgraph:JobVertexResourceRequirements",
-            "properties" : {
-              "parallelism" : {
-                "type" : "object",
-                "id" : "urn:jsonschema:org:apache:flink:runtime:jobgraph:JobVertexResourceRequirements:Parallelism",
-                "properties" : {
-                  "lowerBound" : {
-                    "type" : "integer"
-                  },
-                  "upperBound" : {
-                    "type" : "integer"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      "id" : "urn:jsonschema:org:apache:flink:runtime:rest:messages:job:JobResourceRequirementsBody"
     },
     "response" : {
       "type" : "object",
