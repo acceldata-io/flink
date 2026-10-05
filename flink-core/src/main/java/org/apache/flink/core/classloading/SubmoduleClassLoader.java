@@ -20,6 +20,7 @@ package org.apache.flink.core.classloading;
 import org.apache.flink.configuration.CoreOptions;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -31,16 +32,39 @@ import java.util.Collections;
  *
  * <p>Classes related to logging (e.g., log4j) are loaded parent-first.
  *
+ * <p>Shaded third-party libraries under {@code org.apache.flink.shaded.} are forced parent-first —
+ * submodule jars (e.g. flink-rpc-akka.jar, flink-table-planner.jar) bundle their own copy of these
+ * shaded libs (netty4, jackson2, guava33, …) which overlap with flink-dist's copy on the owner
+ * (app) loader. Loading the submodule's copy child-first produced duplicate Class objects for the
+ * same shaded prefix across the two loaders and crashed TaskManager startup with: {@code
+ * LinkageError: loader constraint violation ... Bootstrap/AddressResolverGroup} {@code
+ * IncompatibleClassChangeError: LengthFieldPrepender does not implement ChannelHandler}. Longest
+ * matching prefix wins in {@link ComponentClassLoader}'s matcher (owner-first entry {@code
+ * org.apache.flink.shaded.} outscores the broader component-first entry {@code org.apache.flink}),
+ * so these classes delegate to the owner loader.
+ *
  * <p>All other classes can only be loaded if they are either available in the submodule jar or the
  * bootstrap/app classloader (i.e., provided by the JDK).
  */
 public class SubmoduleClassLoader extends ComponentClassLoader {
+
+    private static final String[] OWNER_FIRST_PACKAGES =
+            concat(
+                    CoreOptions.PARENT_FIRST_LOGGING_PATTERNS,
+                    new String[] {"org.apache.flink.shaded."});
+
     public SubmoduleClassLoader(URL[] classpath, ClassLoader parentClassLoader) {
         super(
                 classpath,
                 parentClassLoader,
-                CoreOptions.PARENT_FIRST_LOGGING_PATTERNS,
+                OWNER_FIRST_PACKAGES,
                 new String[] {"org.apache.flink"},
                 Collections.emptyMap());
+    }
+
+    private static String[] concat(String[] a, String[] b) {
+        String[] out = Arrays.copyOf(a, a.length + b.length);
+        System.arraycopy(b, 0, out, a.length, b.length);
+        return out;
     }
 }
