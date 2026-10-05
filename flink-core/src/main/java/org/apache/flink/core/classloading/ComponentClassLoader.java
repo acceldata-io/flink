@@ -100,10 +100,18 @@ public class ComponentClassLoader extends URLClassLoader {
                     return resolveIfNeeded(resolve, loadedClass);
                 }
 
-                if (isComponentFirstClass(name)) {
+                // When a name matches both lists, the longer (more specific) prefix wins.
+                // Without this tiebreaker, SubmoduleClassLoader's broad component-first entry
+                // "org.apache.flink" would eat shaded-library names like
+                // "org.apache.flink.shaded.netty4.*" and self-load them, duplicating classes
+                // already on the owner (app) loader and crashing TaskManager with
+                // LinkageError / IncompatibleClassChangeError on netty handlers.
+                int ownerMatchLen = longestMatchingPrefix(ownerFirstPackages, name);
+                int componentMatchLen = longestMatchingPrefix(componentFirstPackages, name);
+                if (componentMatchLen >= 0 && componentMatchLen >= ownerMatchLen) {
                     return loadClassFromComponentFirst(name, resolve);
                 }
-                if (isOwnerFirstClass(name)) {
+                if (ownerMatchLen >= 0) {
                     return loadClassFromOwnerFirst(name, resolve);
                 }
 
@@ -143,6 +151,16 @@ public class ComponentClassLoader extends URLClassLoader {
 
     private boolean isComponentFirstClass(final String name) {
         return Arrays.stream(componentFirstPackages).anyMatch(name::startsWith);
+    }
+
+    private static int longestMatchingPrefix(final String[] prefixes, final String name) {
+        int best = -1;
+        for (String p : prefixes) {
+            if (name.startsWith(p) && p.length() > best) {
+                best = p.length();
+            }
+        }
+        return best;
     }
 
     private Class<?> loadClassFromComponentOnly(final String name, final boolean resolve)
