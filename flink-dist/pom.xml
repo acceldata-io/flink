@@ -525,6 +525,27 @@ under the License.
 
 	<profiles>
 		<profile>
+			<!-- Bundles externally built ODP connectors into lib/ (see bin.xml). The connectors are
+				built and deployed to Nexus before Flink, so this is only enabled by the ODP package
+				build (-Pinclude-connectors). The scope is provided so that the jars are not shaded
+				into flink-dist. -->
+			<id>include-connectors</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.flink</groupId>
+					<artifactId>flink-sql-connector-kudu</artifactId>
+					<version>2.0.0.3.3.6.7-SNAPSHOT</version>
+					<scope>provided</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>*</groupId>
+							<artifactId>*</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<!-- Creates/Removes the 'build-target' symlink in the root directory (only Unix systems) -->
 			<id>symlink-build-target</id>
 			<activation>

@@ -46,6 +46,21 @@ under the License.
 				<include>org.apache.hadoop:hadoop-client-runtime</include>
 			</includes>
 		</dependencySet>
+
+		<!-- ODP connectors, only present with the include-connectors profile (see pom.xml) -->
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<unpack>false</unpack>
+			<scope>provided</scope>
+			<useProjectArtifact>false</useProjectArtifact>
+			<useProjectAttachments>false</useProjectAttachments>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<fileMode>0644</fileMode>
+
+			<includes>
+				<include>org.apache.flink:flink-sql-connector-kudu</include>
+			</includes>
+		</dependencySet>
 	</dependencySets>
 
 	<files>
