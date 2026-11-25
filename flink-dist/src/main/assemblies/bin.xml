@@ -46,6 +46,24 @@ under the License.
 				<include>org.apache.hadoop:hadoop-client-runtime</include>
 			</includes>
 		</dependencySet>
+
+		<!-- ODP connectors, only present with the include-connectors profile (see pom.xml).
+			They go to opt/, not lib/: lib/ is always parent-first for org.apache.flink.*, so a
+			connector there would shadow the copy bundled in DataStream jobs (e.g. kudu-replication).
+			SQL users load it with sql-client.sh -j or ADD JAR. -->
+		<dependencySet>
+			<outputDirectory>opt</outputDirectory>
+			<unpack>false</unpack>
+			<scope>provided</scope>
+			<useProjectArtifact>false</useProjectArtifact>
+			<useProjectAttachments>false</useProjectAttachments>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<fileMode>0644</fileMode>
+
+			<includes>
+				<include>org.apache.flink:flink-sql-connector-kudu</include>
+			</includes>
+		</dependencySet>
 	</dependencySets>
 
 	<files>
