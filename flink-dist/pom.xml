@@ -525,7 +525,7 @@ under the License.
 
 	<profiles>
 		<profile>
-			<!-- Bundles externally built ODP connectors into lib/ (see bin.xml). The connectors are
+			<!-- Bundles externally built ODP connectors into opt/ (see bin.xml). The connectors are
 				built and deployed to Nexus before Flink, so this is only enabled by the ODP package
 				build (-Pinclude-connectors). The scope is provided so that the jars are not shaded
 				into flink-dist. -->

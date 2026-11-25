@@ -47,9 +47,12 @@ under the License.
 			</includes>
 		</dependencySet>
 
-		<!-- ODP connectors, only present with the include-connectors profile (see pom.xml) -->
+		<!-- ODP connectors, only present with the include-connectors profile (see pom.xml).
+			They go to opt/, not lib/: lib/ is always parent-first for org.apache.flink.*, so a
+			connector there would shadow the copy bundled in DataStream jobs (e.g. kudu-replication).
+			SQL users load it with sql-client.sh -j or ADD JAR. -->
 		<dependencySet>
-			<outputDirectory>lib</outputDirectory>
+			<outputDirectory>opt</outputDirectory>
 			<unpack>false</unpack>
 			<scope>provided</scope>
 			<useProjectArtifact>false</useProjectArtifact>
